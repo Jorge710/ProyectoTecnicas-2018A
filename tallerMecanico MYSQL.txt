@@ -1,0 +1,193 @@
+CREATE DATABASE tallerMecanico;
+GO
+
+USE tallerMecanico;
+GO
+
+CREATE TABLE usuario 
+ (id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  nombre VARCHAR(25) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  passw VARCHAR(255),
+  fecha_registro DATETIME DEFAULT NOW() NOT NULL,
+  passadmin VARCHAR(255),
+  tipousuario VARCHAR (60) NOT NULL,
+  PRIMARY KEY (id)
+  );
+
+
+CREATE TABLE empresa
+ (RucEmpre NUMERIC (20) UNIQUE NOT NULL,
+  NomEmpre VARCHAR(30)  NOT NULL,
+  DirEmpre VARCHAR(200)  NOT NULL,
+  TlfEmpre NUMERIC (10) NOT NULL,
+  PRIMARY KEY (RucEmpre)
+  );
+
+  
+CREATE TABLE empleado
+ (RucEmpl NUMERIC (20) UNIQUE NOT NULL,
+  NomEmpl VARCHAR (60) NOT NULL,
+  ApelEmpl VARCHAR(30) NOT NULL,
+  DirEmpl VARCHAR (60) NOT NULL,
+  TlfEmpl NUMERIC (10),
+  EmailEmpl VARCHAR(255)UNIQUE,
+  Activo TINYINT NOT NULL,
+  RucEmpre NUMERIC (20) NOT NULL,
+  FOREIGN KEY (RucEmpre) REFERENCES empresa (RucEmpre)
+	ON UPDATE CASCADE,
+  PRIMARY KEY (RucEmpl)
+  );
+
+
+CREATE TABLE proveedor
+ (RucProv NUMERIC (20) UNIQUE NOT NULL,
+  NomProv VARCHAR(30) NOT NULL,
+  ApelProv VARCHAR(30) NOT NULL,
+  DirProv VARCHAR(30) NOT NULL,
+  TlfProv NUMERIC (10) NOT NULL,
+  EmailProv VARCHAR(255) UNIQUE,
+  Activo TINYINT NOT NULL,
+  PRIMARY KEY (RucProv)
+  );
+
+
+CREATE TABLE cab_fact_proveedor
+ (NoFact INT UNIQUE AUTO_INCREMENT,
+  RucEmpre NUMERIC (20),
+  RucProv NUMERIC (20) NOT NULL,
+  FOREIGN KEY (RucEmpre) REFERENCES empresa (RucEmpre),
+  FOREIGN KEY (RucProv) REFERENCES proveedor (RucProv),
+  PRIMARY KEY (NoFact)
+  );
+
+
+CREATE TABLE det_fact_proveedor
+ (IDdet_fact INT UNIQUE AUTO_INCREMENT,
+  Cantidad NUMERIC (20) NOT NULL,
+  Precio DECIMAL (10,2) NOT NULL, 
+  Total DECIMAL (10,2) NOT NULL,
+  NoFact INT not null,
+  FOREIGN KEY (NoFact) REFERENCES cab_fact_proveedor (NoFact),
+  PRIMARY KEY (IDdet_fact)
+  );
+
+
+CREATE TABLE producto
+ (IdProd INT UNIQUE AUTO_INCREMENT NOT NULL,
+  Descripcion VARCHAR (60) not null,
+  Cantidad INT not null,
+  CostoUnit DECIMAL (10,2) not null,
+  PrecioUnit DECIMAL (10,2) not null,
+  RucProv NUMERIC (20) NOT NULL,
+  FOREIGN KEY (RucProv) REFERENCES proveedor (RucProv),
+  PRIMARY KEY (IdProd)
+  );
+
+  
+CREATE TABLE cliente
+ (RucCli NUMERIC (20) NOT NULL,
+  NomCli VARCHAR (60) NOT NULL,
+  ApelCli VARCHAR(30) NOT NULL,
+  DirCli VARCHAR (60) NOT NULL,
+  TlfCli NUMERIC (10),
+  EmailCli VARCHAR(255) UNIQUE,
+  Activo TINYINT NOT NULL,
+  PRIMARY KEY (RucCli)
+ );
+
+
+CREATE TABLE vehiculo
+ (Placa VARCHAR (10) UNIQUE NOT NULL,
+  Tipo VARCHAR (60) NOT NULL,
+  Modelo VARCHAR (60) NOT NULL,
+  Color VARCHAR (60),
+  RucCli NUMERIC (20) NOT NULL,
+  FOREIGN KEY (RucCli) REFERENCES cliente (RucCli)
+	ON UPDATE CASCADE,
+  PRIMARY KEY (Placa)
+  );
+
+
+
+CREATE TABLE servicio
+ (IdServ INT UNIQUE AUTO_INCREMENT NOT NULL,
+  Descripcion VARCHAR (60) not null,
+  PrecioServ DECIMAL (10,2) not null,
+  PRIMARY KEY (IdServ)
+  );
+
+CREATE TABLE orden_trabajo
+ (IdOrden VARCHAR (10) UNIQUE NOT NULL,
+  FechaHora_recepcion DATETIME DEFAULT NOW() NOT NULL,
+  Kilometraje NUMERIC (20) NOT NULL,
+  Descripcion VARCHAR (500),
+  Mano_de_obra DECIMAL (10,2) NOT NULL, 
+  Otros DECIMAL (10,2) NOT NULL,
+  Subtotal DECIMAL (10,2) NOT NULL,
+  Iva DECIMAL (10,2) NOT NULL,
+  Total DECIMAL (10,2) NOT NULL,
+  Placa VARCHAR (10) NOT NULL,
+  IdServ INT,
+  RucEmpl NUMERIC (20),
+  RucCli NUMERIC (20),
+  FOREIGN KEY (RucCli) REFERENCES cliente (RucCli)
+	ON UPDATE CASCADE,
+  FOREIGN KEY (Placa) REFERENCES vehiculo (Placa)
+	ON UPDATE CASCADE,
+  FOREIGN KEY (RucEmpl) REFERENCES empleado (RucEmpl)
+	ON UPDATE CASCADE,
+  FOREIGN KEY (IdServ) REFERENCES servicio (IdServ)
+	ON UPDATE CASCADE,
+  PRIMARY KEY (IdOrden)
+  );
+
+
+CREATE TABLE cab_fact
+ (NoFact INT UNIQUE AUTO_INCREMENT,
+  RucCli NUMERIC (20) NOT NULL,
+  NomCli VARCHAR (50) NOT NULL, 
+  RucEmpre NUMERIC (20) NOT NULL,
+  FOREIGN KEY (RucCli) REFERENCES cliente (RucCli),
+  FOREIGN KEY (RucEmpre) REFERENCES empresa (RucEmpre),
+  PRIMARY KEY (NoFact)
+  );
+
+
+CREATE TABLE det_fact
+ (IDdet_fact INT UNIQUE AUTO_INCREMENT,
+  Cantidad NUMERIC (20) NOT NULL,
+  Precio DECIMAL (10,2) NOT NULL, 
+  Total DECIMAL (10,2) NOT NULL,
+  NoFact INT not null,
+  IdProd INT,
+  IdServ INT,
+  FOREIGN KEY (NoFact) REFERENCES cab_fact (NoFact),
+  FOREIGN KEY (IdProd) REFERENCES producto (IdProd),
+  FOREIGN KEY (IdServ) REFERENCES servicio (IdServ),
+  PRIMARY KEY (IDdet_fact)
+  );
+
+ 
+CREATE TABLE cuenta_x_cobrar
+(CodCuenta INT NOT NULL,
+ TipoCta CHAR NOT NULL,
+ NoFact INT NOT NULL,
+ FOREIGN KEY (NoFact) REFERENCES cab_fact (NoFact),
+ PRIMARY KEY (CodCuenta)
+);
+
+
+CREATE TABLE cuenta_x_pagar
+(CodCuenta INT NOT NULL,
+ TipoCta CHAR NOT NULL,
+ NoFact INT NOT NULL,
+ FOREIGN KEY (NoFact) REFERENCES cab_fact_proveedor (NoFact),
+ PRIMARY KEY (CodCuenta)
+);
+
+
+
+
+
+

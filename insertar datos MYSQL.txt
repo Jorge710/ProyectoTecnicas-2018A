@@ -1,0 +1,32 @@
+INSERT INTO empresa VALUES(1723036552,'Mechanic AEJ','Ladron de Guevera E11-253, Quito 170517',297-6300);
+
+INSERT INTO `usuario` VALUES (NULL, 'Jorge', 'izajorge7@gmail.com', NULL, CURRENT_TIMESTAMP, '123jorge','Administrador');
+
+INSERT INTO empleado VALUES(1236547854,'EDUARDO','CAIZA','Quito',2874102,'eduardo@gmail.com',1,1723036552),
+							(1736547854,'JUAN','CAIZA','Quito',098410189,'juan@hotmail.com',1,1723036552),
+							(1836547854,'DAVID','LOPEZ','Quito',098410189,'david@hotmail.com',1,1723036552),
+							(0736547854,'LUIS','CHAVEZ','Quito',2874102,'luis@gmail.com',1,1723036552);
+							
+INSERT INTO cliente VALUES(1723036552,'JORGE','IZA','El Condado',0922145254,'izajorge7@gmail.com',1),
+						  (1712412645,'DAVID','LOPEZ','San Juan',2214587,'david@gmail.com',1),
+						  (1754121590,'HECTOR','CRUZ','Shyris',092143012,'hector@gmail.com',1),
+						  (1521452164,'JUAN','ALTAMIRANO','San Blas',092365428,'juan@gmail.com',1),
+						  (1325445789,'MARIA','CANDO','El Condado',2321021,'maria@gmail.com',1);
+
+
+INSERT INTO proveedor VALUES (1154218795,'SUSANA','RODRIGEZ','6 de Diciembre',09230594,'susana@hotmail.com',1),
+							(1554126584,'MAYRA','LOZA','Colon',092320121,'mayra@hotmail.com',1),
+							(1745687458,'JENNY','ALQUINGA','Amazonas',2325478,'jenny@gmail.com',1),
+							(1321541295,'DANNIELA','CHAVEZ','6 de Diciembre',2489562,'danniela@hotmail.com',1),
+							(1236547854,'EDUARDO','RIOS','Colon',0987451201,'eduardo@hotmail.com',1);
+
+
+INSERT INTO producto VALUES('','Filtro de aceite',10,5,6,1154218795),
+			               ('','Filtro de aire',10,5,6,1154218795);
+
+
+INSERT INTO servicio VALUES('','ABC de frenos',20),
+							('','Cambio de Aceite',25);
+							
+
+
