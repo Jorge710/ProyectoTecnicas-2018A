@@ -152,6 +152,27 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
         }
     }
 
+    /*limpiar campos*/
+    public void limpiarCampos(){
+       
+       //datos del proveedor
+       txtCedulaProv.setText(null);
+       txtNomProv.setText(null);
+       txtApelProv.setText(null);
+       txtDirProv.setText(null);
+       txtTlfProv.setText(null);
+       txtEmailProv.setText(null);
+       txtActivoProv.setText(null);
+       
+       //datos del producto
+       txtIdProd.setText(null);
+       txtDescripcionProd.setText(null);
+       txtCantidadPod.setText(null);
+       txtCostoUnitProd.setText(null);
+       txtPrecioUnitProd.setText(null);
+       txtRucProv_prod.setText(null);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -203,7 +224,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -526,9 +547,19 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
 
         jPanel5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButton1.setText("REGRESAR");
+        btnRegresar.setText("REGRESAR");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -536,7 +567,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnRegresar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -547,7 +578,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnRegresar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCancelar)
                 .addContainerGap(32, Short.MAX_VALUE))
@@ -580,6 +611,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
 
         executeSqlQuery(query, "Inserted");
 
+        limpiarCampos();
     }//GEN-LAST:event_btnGuardarDatosProvActionPerformed
 
     private void btnActivarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarProvActionPerformed
@@ -591,6 +623,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
 
         executeSqlQuery(query, "Updated");
 
+        limpiarCampos();
     }//GEN-LAST:event_btnModificarProvActionPerformed
 
     private void tablaProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProveedorMouseClicked
@@ -610,12 +643,15 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
         String query = "UPDATE `producto` SET `IdProd`='" + txtIdProd.getText() + "',`Descripcion`='" + txtDescripcionProd.getText() + "',`Cantidad`='" + txtCantidadPod.getText() + "',`CostoUnit`='" + txtCostoUnitProd.getText() + "',`PrecioUnit`='" + txtPrecioUnitProd.getText() + "',`RucProv`='" + txtRucProv_prod.getText() + "' WHERE `IdProd`='" + txtIdProd.getText() + "'";
         executeSqlQueryProducto(query, "Updated");
 
+        limpiarCampos();
     }//GEN-LAST:event_btnModificar_productoActionPerformed
 
     private void btnGuardarDatos_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatos_productoActionPerformed
 
         String query = "INSERT INTO `producto` (`IdProd`, `Descripcion`, `Cantidad`, `CostoUnit`, `PrecioUnit`, `RucProv`) VALUES (NULL, '" + txtDescripcionProd.getText() + "', '" + txtCantidadPod.getText() + "', '" + txtCostoUnitProd.getText() + "', '" + txtPrecioUnitProd.getText() + "', '" + txtRucProv_prod.getText() + "');";
         executeSqlQueryProducto(query, "Inserted");
+        
+        limpiarCampos();
     }//GEN-LAST:event_btnGuardarDatos_productoActionPerformed
 
     private void tblProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosMouseClicked
@@ -628,6 +664,16 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
         txtPrecioUnitProd.setText(model.getValueAt(i, 4).toString());
         txtRucProv_prod.setText(model.getValueAt(i, 5).toString());
     }//GEN-LAST:event_tblProductosMouseClicked
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        FrmMenu menu = new FrmMenu();
+        menu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -671,7 +717,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarDatos_producto;
     private javax.swing.JButton btnModificarProv;
     private javax.swing.JButton btnModificar_producto;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

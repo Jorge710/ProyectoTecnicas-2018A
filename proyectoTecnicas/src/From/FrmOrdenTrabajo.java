@@ -16,6 +16,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
      */
     public FrmOrdenTrabajo() {
         initComponents();
+        this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
     }
 
     /**

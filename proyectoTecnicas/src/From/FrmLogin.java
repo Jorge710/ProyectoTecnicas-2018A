@@ -22,7 +22,11 @@ public class FrmLogin extends javax.swing.JFrame {
     public FrmLogin() {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
+        iniciarLogin();
+    }
 
+    public void iniciarLogin() {
+        barPro.setVisible(false);//inicializacion JbarProgres
     }
 
     public void esconderProgresBar() {
@@ -34,7 +38,6 @@ public class FrmLogin extends javax.swing.JFrame {
                         *inicializa el tiempo
          */
     }
-
 
     void acceder(String usuario, String pass) {
         String cap = "";
@@ -177,7 +180,7 @@ public class FrmLogin extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btnsalirActionPerformed
 
-        /**
+    /**
      * Clase para el JbarProgres
      */
     class TimerListener implements ActionListener {
