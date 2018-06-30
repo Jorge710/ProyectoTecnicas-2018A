@@ -301,24 +301,24 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
             if (txtCedulaCli.getText() == null || nomCli.equals("") || apellCli.equals("") || dirCli.equals("") || emailCli.equals("") || txtTlfCli.getText() == null) {
 
                 JOptionPane.showMessageDialog(null, "!! FALTA LLENAR CAMPOS!! ");
-                
+
             } else {
-                
+
                 int i;
                 for(i=1; i<ciCli.length();i++){
                     System.out.println("i " +i);
                 }
-                
+
                 if(i==10){
-                pst.setString(1, ciCli);
-                pst.setString(2, nomCli);
-                pst.setString(3, apellCli);
-                pst.setString(4, dirCli);
-                pst.setString(5, emailCli);
-                pst.setString(6, tlfCLi);
-                pst.executeUpdate();
-                mostrarClientesTabla();
-                JOptionPane.showMessageDialog(null, " !! CLIENTE REGISTRADO EXITOSAMENTE !! ");
+                    pst.setString(1, ciCli);
+                    pst.setString(2, nomCli);
+                    pst.setString(3, apellCli);
+                    pst.setString(4, dirCli);
+                    pst.setString(5, emailCli);
+                    pst.setString(6, tlfCLi);
+                    pst.executeUpdate();
+                    mostrarClientesTabla();
+                    JOptionPane.showMessageDialog(null, " !! CLIENTE REGISTRADO EXITOSAMENTE !! ");
                 }else{
                     JOptionPane.showMessageDialog(null, "  !!  INGRESE LOS 10 DIGITOS DE LA CEDULA ");
                 }
@@ -333,6 +333,14 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
         //
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnRegrearMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegrearMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegrearMenu1ActionPerformed
+
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
 
         FrmMenu venMenu = new FrmMenu();
@@ -342,16 +350,8 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
         venMenu.setLocation(500, 100);
         venMenu.setVisible(true);
         this.dispose();
-        
+
     }//GEN-LAST:event_btnModificarActionPerformed
-
-    private void btnRegrearMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegrearMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegrearMenu1ActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

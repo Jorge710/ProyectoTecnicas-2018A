@@ -61,6 +61,11 @@ public class FrmMenu extends javax.swing.JFrame {
         });
 
         jButton3.setText("CONTABILIDAD");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -71,7 +76,7 @@ public class FrmMenu extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(18, Short.MAX_VALUE))
+                        .addContainerGap(41, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -107,7 +112,7 @@ public class FrmMenu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 405, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -125,15 +130,17 @@ public class FrmMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        
+
         FrmLogin lg = new FrmLogin();
         lg.setVisible(true);
         this.dispose();
-        
+
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        FrmRegistroFactura rf = new FrmRegistroFactura();
+        rf.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnOrdenTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenTrabajoActionPerformed
@@ -143,10 +150,16 @@ public class FrmMenu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnOrdenTrabajoActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        FrmContabilidad cont = new FrmContabilidad();
+        cont.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        FrmMenuRegistrar lg = new FrmMenuRegistrar();
-        lg.setVisible(true);
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
