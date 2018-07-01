@@ -83,9 +83,9 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
         txtEmailCli = new javax.swing.JTextField();
         txtTlfCli = new javax.swing.JTextField();
         btnModificar = new javax.swing.JButton();
-        btnRegrearMenu1 = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnGuardarDatos = new javax.swing.JButton();
+        btnRegresar1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRegistroCliente = new javax.swing.JTable();
@@ -115,14 +115,6 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
             }
         });
 
-        btnRegrearMenu1.setFont(new java.awt.Font("AR JULIAN", 2, 18)); // NOI18N
-        btnRegrearMenu1.setText("REGRESAR");
-        btnRegrearMenu1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegrearMenu1ActionPerformed(evt);
-            }
-        });
-
         btnEliminar.setFont(new java.awt.Font("AR JULIAN", 2, 18)); // NOI18N
         btnEliminar.setText("ELIMINAR");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -136,6 +128,13 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
         btnGuardarDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarDatosActionPerformed(evt);
+            }
+        });
+
+        btnRegresar1.setText("REGRESAR");
+        btnRegresar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresar1ActionPerformed(evt);
             }
         });
 
@@ -169,11 +168,12 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
                                 .addComponent(txtTlfCli)
                                 .addComponent(txtEmailCli)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnGuardarDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegrearMenu1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnGuardarDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRegresar1))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -198,8 +198,9 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(txtDirCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnRegrearMenu1)
-                        .addGap(9, 9, 9)
+                        .addGap(8, 8, 8)
+                        .addComponent(btnRegresar1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnModificar)
                         .addGap(18, 18, 18)
                         .addComponent(btnEliminar)))
@@ -337,10 +338,6 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnRegrearMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegrearMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegrearMenu1ActionPerformed
-
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
 
         FrmMenu venMenu = new FrmMenu();
@@ -352,6 +349,12 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
         this.dispose();
 
     }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnRegresar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresar1ActionPerformed
+        FrmMenu menu = new FrmMenu();
+        menu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresar1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -398,7 +401,8 @@ public class FrmRegistroCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardarDatos;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JButton btnRegrearMenu1;
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnRegresar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

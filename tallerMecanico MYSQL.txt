@@ -180,7 +180,7 @@ CREATE TABLE cuenta_x_cobrar
 
 CREATE TABLE cuenta_x_pagar
 (CodCuenta INT NOT NULL,
- TipoCta CHAR NOT NULL,
+ Importe DECIMAL (10,2) NOT NULL,
  NoFact INT NOT NULL,
  FOREIGN KEY (NoFact) REFERENCES cab_fact_proveedor (NoFact),
  PRIMARY KEY (CodCuenta)

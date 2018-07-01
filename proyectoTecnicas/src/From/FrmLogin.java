@@ -3,6 +3,7 @@ package From;
 import Clase.conectar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,7 +12,7 @@ import javax.swing.Timer;
 
 /**
  *
- * @author Administrador
+ * @author Jorge Iza
  */
 public class FrmLogin extends javax.swing.JFrame {
 

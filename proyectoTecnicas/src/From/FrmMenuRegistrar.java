@@ -17,6 +17,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
     public FrmMenuRegistrar() {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
+        this.setTitle("Menú Registrar");
     }
 
     /**
@@ -28,38 +29,48 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnRegistrarCliente = new javax.swing.JButton();
+        btnRegistrarProveedor = new javax.swing.JButton();
+        btnRegistrarEmpleado = new javax.swing.JButton();
+        btnRegistrarProducto = new javax.swing.JButton();
+        btnRegistrarVehiculo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Registrar cliente");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrarCliente.setText("Registrar cliente");
+        btnRegistrarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegistrarClienteActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Registrar Proveedor");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrarProveedor.setText("Registrar Proveedor");
+        btnRegistrarProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnRegistrarProveedorActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Registrar Empleado");
-
-        jButton4.setText("Registrar Producto");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrarEmpleado.setText("Registrar Empleado");
+        btnRegistrarEmpleado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnRegistrarEmpleadoActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Registrar Vehiculo");
+        btnRegistrarProducto.setText("Registrar Producto");
+        btnRegistrarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarProductoActionPerformed(evt);
+            }
+        });
+
+        btnRegistrarVehiculo.setText("Registrar Vehiculo");
+        btnRegistrarVehiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarVehiculoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,13 +78,13 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnRegistrarCliente)
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRegistrarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRegistrarEmpleado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRegistrarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRegistrarVehiculo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -81,37 +92,49 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
+                    .addComponent(btnRegistrarCliente)
+                    .addComponent(btnRegistrarEmpleado))
                 .addGap(8, 8, 8)
-                .addComponent(jButton2)
+                .addComponent(btnRegistrarProveedor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
+                .addComponent(btnRegistrarProducto)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addComponent(btnRegistrarVehiculo)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnRegistrarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarProveedorActionPerformed
         FrmRegistrarProveedor rp = new FrmRegistrarProveedor();
         rp.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnRegistrarProveedorActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnRegistrarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarProductoActionPerformed
         FrmRegistrarProductos rp = new FrmRegistrarProductos();
         rp.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnRegistrarProductoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnRegistrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarClienteActionPerformed
         FrmRegistroCliente rc = new FrmRegistroCliente();
         rc.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnRegistrarClienteActionPerformed
+
+    private void btnRegistrarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEmpleadoActionPerformed
+        FrmRegistrarEmpleado re = new FrmRegistrarEmpleado();
+        re.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegistrarEmpleadoActionPerformed
+
+    private void btnRegistrarVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarVehiculoActionPerformed
+        FrmRegistrarVehiculo rv = new FrmRegistrarVehiculo();
+        rv.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegistrarVehiculoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,10 +172,10 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnRegistrarCliente;
+    private javax.swing.JButton btnRegistrarEmpleado;
+    private javax.swing.JButton btnRegistrarProducto;
+    private javax.swing.JButton btnRegistrarProveedor;
+    private javax.swing.JButton btnRegistrarVehiculo;
     // End of variables declaration//GEN-END:variables
 }

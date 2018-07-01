@@ -17,6 +17,7 @@ public class FrmContabilidad extends javax.swing.JFrame {
     public FrmContabilidad() {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
+        this.setTitle("Contabilidad");
     }
 
     /**
@@ -48,6 +49,11 @@ public class FrmContabilidad extends javax.swing.JFrame {
         });
 
         jButton3.setText("Abono Cliente");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -73,6 +79,11 @@ public class FrmContabilidad extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Cuentas por Pagar"));
 
         jButton6.setText("Cargos proveedor");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Abono Proveedor");
 
@@ -135,6 +146,16 @@ public class FrmContabilidad extends javax.swing.JFrame {
         cc.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        FrmCargoProveedores cp = new FrmCargoProveedores();
+        cp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
