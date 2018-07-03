@@ -10,14 +10,17 @@ package Clase;
  * @author User
  */
 public class ClsCuentas_x_pagar {
+
     private int codCuenta;
     private double importe;
     private int noFactura;
+    private int proveedor;
 
-    public ClsCuentas_x_pagar(int codCuenta, double importe, int noFactura) {
+    public ClsCuentas_x_pagar(int codCuenta, double importe, int noFactura, int proveedor) {
         this.codCuenta = codCuenta;
         this.importe = importe;
         this.noFactura = noFactura;
+        this.proveedor = proveedor;
     }
 
     public int getCodCuenta() {
@@ -43,7 +46,16 @@ public class ClsCuentas_x_pagar {
     public void setNoFactura(int noFactura) {
         this.noFactura = noFactura;
     }
+
+    public int getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(int proveedor) {
+        this.proveedor = proveedor;
+    }
+
+
     
-    
-    
+
 }

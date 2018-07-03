@@ -119,7 +119,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarProductoActionPerformed
 
     private void btnRegistrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarClienteActionPerformed
-        FrmRegistroCliente rc = new FrmRegistroCliente();
+        FrmRegistrarCliente rc = new FrmRegistrarCliente();
         rc.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegistrarClienteActionPerformed

@@ -27,21 +27,21 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
         this.setTitle("Cargo Ciente");
-        txtNoFactura.setEditable(false);
+        txtProveedor.setEditable(false);
         mostrarCargosProvTabla();
-        llenarComboNoFact();
+        llenarComboProveedor();
     }
 
     /*llenar combox */
-    public void llenarComboNoFact() {
+    public void llenarComboProveedor() {
         Statement st;
         ResultSet rs;
 
         try {
             st = cn.createStatement();
-            rs = st.executeQuery("SELECT * FROM `cab_fact_proveedor`");
+            rs = st.executeQuery("SELECT * FROM `proveedor`");
             while (rs.next()) {
-                this.cmbNumFact.addItem(rs.getString("NoFact"));
+                this.cmbProveedor.addItem(rs.getString("RucProv"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,7 +61,7 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
             rs = st.executeQuery(query);
             ClsCuentas_x_pagar clsPagar;
             while (rs.next()) {
-                clsPagar = new ClsCuentas_x_pagar(rs.getInt("CodCuenta"), rs.getDouble("Importe"), rs.getInt("NoFact"));
+                clsPagar = new ClsCuentas_x_pagar(rs.getInt("CodCuenta"),rs.getDouble("Importe"), rs.getInt("NoFact"), rs.getInt("RucProv"));
                 prodList.add(clsPagar);
 
             }
@@ -74,11 +74,13 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
     public void mostrarCargosProvTabla() {
         ArrayList<ClsCuentas_x_pagar> list = getProductoList();
         DefaultTableModel model = (DefaultTableModel) tblCargoProveedor.getModel();
-        Object[] row = new Object[6];
+        Object[] row = new Object[4];
         for (int i = 0; i < list.size(); i++) {
             row[0] = list.get(i).getCodCuenta();
             row[1] = list.get(i).getImporte();
             row[2] = list.get(i).getNoFactura();
+            row[3] = list.get(i).getProveedor();
+            
 
             model.addRow(row);
 
@@ -121,16 +123,16 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        txtNoFactura = new javax.swing.JTextField();
-        txtReferencia = new javax.swing.JTextField();
         txtProveedor = new javax.swing.JTextField();
+        txtReferencia = new javax.swing.JTextField();
+        txtNumeroFactura = new javax.swing.JTextField();
         txtImporte = new javax.swing.JTextField();
         btnCerrar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         btnNuevoProveedor = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblCargoProveedor = new javax.swing.JTable();
-        cmbNumFact = new javax.swing.JComboBox<>();
+        cmbProveedor = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -168,7 +170,7 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
 
         jLabel6.setText("IMPORTE");
 
-        btnCerrar.setText("Cerrar");
+        btnCerrar.setText("Regresar");
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCerrarActionPerformed(evt);
@@ -194,14 +196,14 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Importe", "factura"
+                "Codigo", "Importe", "factura", "Ruc Prov"
             }
         ));
         jScrollPane3.setViewportView(tblCargoProveedor);
 
-        cmbNumFact.addActionListener(new java.awt.event.ActionListener() {
+        cmbProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbNumFactActionPerformed(evt);
+                cmbProveedorActionPerformed(evt);
             }
         });
 
@@ -211,7 +213,7 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -222,18 +224,22 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnAgregar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnCerrar))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(cmbNumFact, 0, 145, Short.MAX_VALUE)
                                     .addComponent(txtReferencia, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtProveedor, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtImporte))
-                                .addGap(18, 18, 18)
+                                    .addComponent(txtNumeroFactura, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtImporte)
+                                    .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNoFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnNuevoProveedor)))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnNuevoProveedor))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(btnCerrar))))))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
@@ -241,27 +247,27 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cmbNumFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNoFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(txtNumeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCerrar))
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevoProveedor))
+                    .addComponent(btnNuevoProveedor)
+                    .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregar)
-                    .addComponent(btnCerrar))
+                .addComponent(btnAgregar)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(52, Short.MAX_VALUE))
@@ -272,23 +278,27 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
 
-        String query = "INSERT INTO `cuenta_x_pagar` (`CodCuenta`, `Importe`, `NoFact`) VALUES ('" + txtReferencia.getText() + "', '" + txtImporte.getText() + "', '" + txtNoFactura.getText() + "');";
+        String query = "INSERT INTO `cuenta_x_pagar`(`CodCuenta`, `Importe`, `NoFact`, `RucEmpre`, `RucProv`) VALUES ('" + txtReferencia.getText() + "','" + txtImporte.getText() + "','" + txtNumeroFactura.getText() + "',NULL,'" + txtProveedor.getText() + "');";
 
         executeSqlQuery(query, "Inserted");
 
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void cmbNumFactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNumFactActionPerformed
-        String i = (String) cmbNumFact.getSelectedItem().toString();
-        txtNoFactura.setText(i);
-    }//GEN-LAST:event_cmbNumFactActionPerformed
+    private void cmbProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProveedorActionPerformed
+        String i = (String) cmbProveedor.getSelectedItem().toString();
+        txtProveedor.setText(i);
+    }//GEN-LAST:event_cmbProveedorActionPerformed
 
     private void btnNuevoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProveedorActionPerformed
-        // TODO add your handling code here:
+        FrmRegistrarProveedor rp = new FrmRegistrarProveedor();
+        rp.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnNuevoProveedorActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        // TODO add your handling code here:
+        FrmMenu menu = new FrmMenu();
+        menu.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     /**
@@ -330,7 +340,7 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnNuevoProveedor;
-    private javax.swing.JComboBox<String> cmbNumFact;
+    private javax.swing.JComboBox<String> cmbProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
@@ -342,7 +352,7 @@ public class FrmCargoProveedores extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable tblCargoProveedor;
     private javax.swing.JTextField txtImporte;
-    private javax.swing.JTextField txtNoFactura;
+    private javax.swing.JTextField txtNumeroFactura;
     private javax.swing.JTextField txtProveedor;
     private javax.swing.JTextField txtReferencia;
     // End of variables declaration//GEN-END:variables

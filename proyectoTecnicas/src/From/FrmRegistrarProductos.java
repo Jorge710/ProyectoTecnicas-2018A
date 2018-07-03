@@ -30,8 +30,8 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
      */
     public FrmRegistrarProductos() {
         initComponents();
-
-       
+        this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
+        this.setTitle("Registrar Producto");
         mostrarProductosTabla();
     }
 
