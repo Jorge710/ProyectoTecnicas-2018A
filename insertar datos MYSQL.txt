@@ -31,3 +31,8 @@ INSERT INTO servicio VALUES('','ABC de frenos',20),
 
 
 INSERT INTO `vehiculo` (`Placa`, `Tipo`, `Modelo`, `Color`, `RucCli`) VALUES ('ABC123', 'CAMIONETA', 'MAZDA', 'AZUL', '1325445789');
+
+INSERT INTO `cuenta_x_pagar` VALUES ('1', '1500', '1', '1723036552', '1154218795'),
+		   ('2', '2000', '2', '1723036552', '1554126584');
+
+

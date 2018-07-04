@@ -5,11 +5,21 @@
  */
 package From;
 
+import Clase.conectar;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class FrmAbonoProveedor extends javax.swing.JFrame {
+
+    public static float total = 0;
 
     /**
      * Creates new form FrmAbonoProveedor
@@ -18,6 +28,50 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
         this.setTitle("Abono Proveedor");
+        llenarComboCuentas_x_p_abono();
+
+        txtFecha.setEditable(false);
+        txtProveedor.setEditable(false);
+        txtReferencia.setEditable(false);
+        txtSaldo.setEditable(false);
+    }
+
+    /*llenar combox Empleado */
+    public void llenarComboCuentas_x_p_abono() {
+        Statement st;
+        ResultSet rs;
+
+        try {
+            String cap = "";
+            st = cn.createStatement();
+            rs = st.executeQuery("SELECT * FROM `cuenta_x_pagar`");
+            while (rs.next()) {
+                this.cmbNumFactura.addItem(rs.getString("NoFact"));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void executeSqlQuery(String query, String message) {
+        Statement st;
+        try {
+            st = cn.createStatement();
+            if (st.executeUpdate(query) == 1) {
+                /*
+                DefaultTableModel model = (DefaultTableModel) tablaProveedor.getModel();
+                model.setRowCount(0);
+                mostrarProveedoresTabla();
+                 */
+                JOptionPane.showMessageDialog(null, "Data" + message + "Succefully");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data Not" + message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -36,13 +90,13 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        txtSaldo = new javax.swing.JTextField();
+        txtFecha = new javax.swing.JTextField();
+        txtReferencia = new javax.swing.JTextField();
+        txtProveedor = new javax.swing.JTextField();
+        txtImporte = new javax.swing.JTextField();
         btnAgregar = new javax.swing.JButton();
+        cmbNumFactura = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +126,12 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
             }
         });
 
+        cmbNumFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNumFacturaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,12 +152,12 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField5)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                            .addComponent(txtProveedor)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtReferencia, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSaldo, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtImporte, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(cmbNumFactura, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                         .addComponent(btnRegresar)))
                 .addContainerGap())
@@ -113,7 +173,7 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(cmbNumFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -121,23 +181,23 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnAgregar)
                 .addGap(36, 36, 36))
@@ -153,8 +213,76 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+
+        double saldo = Double.parseDouble(txtSaldo.getText());
+        double importe = Double.parseDouble(txtImporte.getText());
+        double saldoRestante = Double.parseDouble(txtSaldo.getText());
+
+        if (saldo == 0) {
+            JOptionPane.showMessageDialog(null, "La cuenta Seleccionada esta SALDADA!!!  =) ");
+            txtFecha.setText("");
+            txtImporte.setText("");
+            txtProveedor.setText("");
+            txtReferencia.setText("");
+            txtSaldo.setText("");
+        } else {
+            try {
+                if (!txtImporte.getText().equals("") && importe <= saldo) {
+
+                    saldoRestante = saldo - importe;
+
+                    String query = "UPDATE `cuenta_x_pagar` SET `Importe`='" + saldoRestante + "' WHERE `CodCuenta`='" + txtReferencia.getText() + "'";
+
+                    executeSqlQuery(query, "Updated");
+
+                    FrmMenu menu = new FrmMenu();
+                    menu.setVisible(true);
+                    this.dispose();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error Ingrese el importe igual o mayor al saldo", "Error!! =(", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void cmbNumFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNumFacturaActionPerformed
+        String i = (String) cmbNumFactura.getSelectedItem().toString();
+
+        try {
+            String sql = "SELECT `CodCuenta`, `Importe`, `NoFact`, `RucEmpre`, `RucProv` FROM `cuenta_x_pagar` WHERE NoFact = '" + i + "'";
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            String datos[] = new String[5];
+
+            while (rs.next()) {
+                datos[0] = rs.getString(1);//CodCuenta
+                datos[1] = rs.getString(2);//Importe es el saldo
+                datos[2] = rs.getString(3);//NoFact
+                datos[3] = rs.getString(4);//RucEmpre
+                datos[4] = rs.getString(5);//RucProv
+            }
+
+            if (datos[0] != null) {
+
+                // lleno los datos de las cuentas por pagar
+                txtSaldo.setText(datos[1]);
+                txtReferencia.setText(datos[0]);
+                txtProveedor.setText(datos[4]);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "!! Factura NO REGISTRADO   !!");
+
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR");
+        }
+    }//GEN-LAST:event_cmbNumFacturaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,17 +322,20 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> cmbNumFactura;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtImporte;
+    private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtReferencia;
+    private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
+
+    conectar cc = new conectar();
+    Connection cn = cc.conexion();
 }

@@ -71,13 +71,13 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
     public void mostrarDatos(String valor) {
 
         try {
-            String sql = "SELECT cliente.RucCli,`NomCli`,`ApelCli`,`DirCli`,`TlfCli`,`EmailCli`,`Placa`,`Tipo`,`Modelo`,`Color` FROM `vehiculo`,`cliente` WHERE cliente.RucCli = '" + valor + "'";
+            String sql = "SELECT cliente.RucCli,`NomCli`,`ApelCli`,`DirCli`,`TlfCli`,`EmailCli`,`Placa`,`Tipo`,`Modelo`,`Color` FROM `vehiculo`,`cliente` WHERE vehiculo.RucCli = '" + valor + "'";
             //String sql = "SELECT * FROM cliente WHERE RucCli = '" + valor + "'";
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
             String datos[] = new String[10];
-            System.out.println(sql);
+            
             while (rs.next()) {
                 datos[0] = rs.getString(1);//ruccli
                 datos[1] = rs.getString(2);//nomcli
@@ -226,7 +226,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         txtIva = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        txtCrearOrdenTrabajo = new javax.swing.JButton();
         txtRuecEmpre = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         cmbEmpleDisponible = new javax.swing.JComboBox<>();
@@ -433,7 +433,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
                 .addComponent(jCheckBox2)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBox8)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -502,7 +502,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(427, Short.MAX_VALUE))
+                .addContainerGap(469, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -588,16 +588,11 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         });
 
         btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
 
-        jButton1.setText("Crear Orden de Trabajo");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txtCrearOrdenTrabajo.setText("Crear Orden de Trabajo");
+        txtCrearOrdenTrabajo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                txtCrearOrdenTrabajoActionPerformed(evt);
             }
         });
 
@@ -647,38 +642,38 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(312, 312, 312)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtNumOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(435, 435, 435)
+                        .addComponent(txtRuecEmpre)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRegresar))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(312, 312, 312)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtNumOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(435, 435, 435)
-                                .addComponent(txtRuecEmpre)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnRegresar))
-                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 19, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(55, 55, 55))))
+                                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(13, 13, 13))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 19, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(416, 416, 416)
-                .addComponent(jButton1)
+                .addComponent(txtCrearOrdenTrabajo)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -705,19 +700,20 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(19, 19, 19)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnGuardar)
-                        .addGap(32, 32, 32)))
+                .addComponent(txtCrearOrdenTrabajo)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGuardar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -744,45 +740,79 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarCliActionPerformed
 
     private void cmbServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbServicioActionPerformed
-        String i = (String) cmbServicio.getSelectedItem().toString();
-        txtPrecioServicio.setText(i);
+       String i = (String) cmbServicio.getSelectedItem().toString();
+
+        try {
+            String sql = "SELECT IdServ, Descripcion, PrecioServ FROM `servicio` WHERE descripcion = '"+i+"'";
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            String datos[] = new String[3];
+
+            while (rs.next()) {
+                datos[0] = rs.getString(1);//IdServ
+                datos[1] = rs.getString(2);//Descripcion
+                datos[2] = rs.getString(3);//PrecioServ
+            }
+
+            if (datos[1] != null) {
+
+                // lleno los datos del cliente en los combobox correspondientes
+                txtPrecioServicio.setText(datos[2]);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "!!    SERVICIO NO REGISTRADO   !!");
+
+                txtPrecioServicio.setText("");
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR");
+        }
+        
     }//GEN-LAST:event_cmbServicioActionPerformed
+
+    private void cmbEmpleDisponibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEmpleDisponibleActionPerformed
+
+        String i = (String) cmbEmpleDisponible.getSelectedItem().toString();
+
+        try {
+            String sql = "SELECT `RucEmpl`,`NomEmpl` FROM `empleado` WHERE  NomEmpl = '" + i + "'";
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            String datos[] = new String[2];
+
+            while (rs.next()) {
+                datos[0] = rs.getString(1);//rucempl
+                datos[1] = rs.getString(2);//nomempl
+            }
+
+            if (datos[0] != null) {
+
+                // lleno los datos del cliente en los combobox correspondientes
+                txtRucEmpleadoDisp.setText(datos[0]);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "!!    CLIENTE NO REGISTRADO   !!");
+
+                txtCedCli.setText("");
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR");
+        }
+
+    }//GEN-LAST:event_cmbEmpleDisponibleActionPerformed
+
+    private void txtCrearOrdenTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCrearOrdenTrabajoActionPerformed
+        String query = "INSERT INTO `orden_trabajo`(`IdOrden`, `FechaHora_recepcion`, `Kilometraje`, `Descripcion`, `Mano_de_obra`, `Otros`, `Subtotal`, `Iva`, `Total`, `IdServ`, `IdCargo`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11])";
+        executeSqlQuery(query, "Inserted");
+    }//GEN-LAST:event_txtCrearOrdenTrabajoActionPerformed
 
     private void btnAgregarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarServicioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarServicioActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String query = "INSERT INTO `orden_trabajo`(`IdOrden`, `FechaHora_recepcion`, `Kilometraje`, `Descripcion`, `Mano_de_obra`, `Otros`, `Subtotal`, `Iva`, `Total`, `IdServ`, `IdCargo`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11])";
-        executeSqlQuery(query, "Inserted");
-
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void cmbEmpleDisponibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEmpleDisponibleActionPerformed
-        String cap = "";
-        
-        try {
-            Statement st;
-            ResultSet rs;
-
-            String i = (String) cmbEmpleDisponible.getSelectedItem().toString();
-            
-            st = cn.createStatement();
-            rs = st.executeQuery("SELECT * FROM `empleado`");
-
-            
-            cap = rs.getString("RucEmpl");
-            System.out.println("hola "+cap);
-            txtRucEmpleadoDisp.setText(cap);
-        } catch (Exception e) {
-        }
-
-
-    }//GEN-LAST:event_cmbEmpleDisponibleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -827,7 +857,6 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbEmpleDisponible;
     private javax.swing.JComboBox<String> cmbServicio;
-    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -869,6 +898,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
     private javax.swing.JTextField txtApelCli;
     private javax.swing.JTextField txtCedCli;
     private javax.swing.JTextField txtColor;
+    private javax.swing.JButton txtCrearOrdenTrabajo;
     private javax.swing.JTextField txtDirCli;
     private javax.swing.JTextField txtEmailCli;
     private javax.swing.JTextField txtIva;
