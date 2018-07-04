@@ -138,10 +138,10 @@ CREATE TABLE det_fact
   Total DECIMAL (10,2) NOT NULL,
   NoFact INT not null,
   IdProd INT,
-  IdServ INT,
+  IdOrden VARCHAR (10),
   FOREIGN KEY (NoFact) REFERENCES cab_fact (NoFact),
   FOREIGN KEY (IdProd) REFERENCES producto (IdProd),
-  FOREIGN KEY (IdServ) REFERENCES servicio (IdServ),
+  FOREIGN KEY (IdOrden) REFERENCES orden_trabajo (IdOrden),
   PRIMARY KEY (IDdet_fact)
   );
 

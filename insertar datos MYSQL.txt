@@ -30,3 +30,4 @@ INSERT INTO servicio VALUES('','ABC de frenos',20),
 							
 
 
+INSERT INTO `vehiculo` (`Placa`, `Tipo`, `Modelo`, `Color`, `RucCli`) VALUES ('ABC123', 'CAMIONETA', 'MAZDA', 'AZUL', '1325445789');
