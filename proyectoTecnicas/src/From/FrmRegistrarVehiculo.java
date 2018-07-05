@@ -30,7 +30,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         mostrarVehiculosTabla();
     }
 
-    
     /*Producto*/
     public ArrayList<ClsVehiculo> getProductoList() {
         ArrayList<ClsVehiculo> vehiList = new ArrayList<ClsVehiculo>();
@@ -53,8 +52,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         return vehiList;
     }
 
-
-
     public void mostrarVehiculosTabla() {
         ArrayList<ClsVehiculo> list = getProductoList();
         DefaultTableModel model = (DefaultTableModel) tblVehiculo.getModel();
@@ -70,8 +67,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
 
         }
     }
-
-
 
     public void executeSqlQueryProducto(String query, String message) {
         Statement st;
@@ -90,6 +85,17 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /*limpiar campos*/
+    public void limpiarCampos() {
+
+        //datos del proveedor
+        txtColor.setText(null);
+        txtModelo.setText(null);
+        txtPlaca.setText(null);
+        txtRucCliente.setText(null);
+        txtTipo.setText(null);
     }
 
     /**
@@ -115,6 +121,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         txtRucCliente = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVehiculo = new javax.swing.JTable();
@@ -129,7 +136,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
 
         jLabel3.setText("Modelo:");
 
-        btnModificar.setFont(new java.awt.Font("AR JULIAN", 2, 18)); // NOI18N
+        btnModificar.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
         btnModificar.setText("MODIFICAR");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,7 +144,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
             }
         });
 
-        btnGuardarDatos.setFont(new java.awt.Font("AR JULIAN", 2, 18)); // NOI18N
+        btnGuardarDatos.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
         btnGuardarDatos.setText("GUARDAR DATOS");
         btnGuardarDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,6 +163,13 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
             }
         });
 
+        btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -165,40 +179,37 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel9))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtRucCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(296, 296, Short.MAX_VALUE))
+                                .addGap(54, 54, 54)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtPlaca, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                                    .addComponent(txtTipo, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                                    .addComponent(txtModelo)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(56, 56, 56)
+                                .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
+                        .addComponent(btnRegresar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(88, 88, 88)
-                                .addComponent(btnGuardarDatos))
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtRucCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel9))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(54, 54, 54)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtPlaca, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                                            .addComponent(txtTipo, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                                            .addComponent(txtModelo)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGap(56, 56, 56)
-                                        .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnRegresar)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(47, 47, 47))))))
+                                .addGap(88, 88, 88)
+                                .addComponent(btnGuardarDatos)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,7 +239,8 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarDatos)
-                    .addComponent(btnModificar))
+                    .addComponent(btnModificar)
+                    .addComponent(btnCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -286,13 +298,13 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         String query = "UPDATE `vehiculo` SET `Placa`='" + txtPlaca.getText() + "',`Tipo`='" + txtTipo.getText() + "',`Modelo`='" + txtModelo.getText() + "',`Color`='" + txtColor.getText() + "',`RucCli`='" + txtRucCliente.getText() + "' WHERE `Placa`='" + txtPlaca.getText() + "'";
         executeSqlQueryProducto(query, "Updated");
-
+        limpiarCampos();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosActionPerformed
         String query = "INSERT INTO `vehiculo` (`Placa`, `Tipo`, `Modelo`, `Color`, `RucCli`) VALUES ('" + txtPlaca.getText() + "','" + txtTipo.getText() + "','" + txtModelo.getText() + "','" + txtColor.getText() + "','" + txtRucCliente.getText() + "')";
         executeSqlQueryProducto(query, "Inserted");
-        
+        limpiarCampos();
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -310,6 +322,10 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         txtColor.setText(model.getValueAt(i, 3).toString());
         txtRucCliente.setText(model.getValueAt(i, 4).toString());
     }//GEN-LAST:event_tblVehiculoMouseClicked
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -347,6 +363,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardarDatos;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegresar;

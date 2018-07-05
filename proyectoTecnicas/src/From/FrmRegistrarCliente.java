@@ -89,6 +89,19 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
         }
     }
 
+    /*limpiar campos*/
+    public void limpiarCampos() {
+
+        //datos del proveedor
+        txtCedulaCli.setText(null);
+        txtNomCli.setText(null);
+        txtApelCli.setText(null);
+        txtDirCli.setText(null);
+        txtTlfCli.setText(null);
+        txtEmailCli.setText(null);
+        txtActivoCli.setText(null);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -118,6 +131,7 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
         txtApelCli = new javax.swing.JTextField();
         btnGuardarDatos = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,7 +168,7 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
 
         jLabel6.setText("Telf Cliente");
 
-        btnGuardarDatos.setFont(new java.awt.Font("AR JULIAN", 2, 18)); // NOI18N
+        btnGuardarDatos.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
         btnGuardarDatos.setText("GUARDAR DATOS");
         btnGuardarDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,11 +176,18 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
             }
         });
 
-        btnModificar.setFont(new java.awt.Font("AR JULIAN", 2, 18)); // NOI18N
+        btnModificar.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
         btnModificar.setText("MODIFICAR");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
             }
         });
 
@@ -181,7 +202,10 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                         .addGap(0, 75, Short.MAX_VALUE)
                         .addComponent(btnGuardarDatos)
                         .addGap(18, 18, 18)
-                        .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnModificar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelar)
+                        .addGap(23, 23, 23))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -203,14 +227,13 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jLabel7)
                                         .addComponent(jLabel6)))
-                                .addGap(68, 68, 68)
+                                .addGap(14, 14, 14)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtActivoCli)
                                     .addComponent(txtEmailCli)
                                     .addComponent(txtDirCli)
-                                    .addComponent(txtTlfCli)
-                                    .addComponent(txtActivoCli))))
-                        .addGap(163, 163, 163)))
-                .addContainerGap())
+                                    .addComponent(txtTlfCli))))
+                        .addGap(173, 173, 173))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +269,8 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarDatos)
-                    .addComponent(btnModificar))
+                    .addComponent(btnModificar)
+                    .addComponent(btnCancelar))
                 .addGap(21, 21, 21))
         );
 
@@ -273,22 +297,24 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        String query = "UPDATE `cliente` SET `RucCli`='" + txtCedulaCli.getText() + "',`NomCli`='" + txtNomCli.getText() + "',`ApelCli`='" + txtApelCli.getText() + "',`DirCli`='" + txtDirCli.getText() + "',`TlfCli`='" + txtTlfCli.getText() + "',`EmailCli`='" + txtEmailCli.getText() + "',`Activo`='" + txtActivoCli.getText() + "' WHERE `RucCli`='" + txtCedulaCli.getText() + "'";
 
-
+        executeSqlQuery(query, "Updated");
+        limpiarCampos();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosActionPerformed
         String query = "INSERT INTO `cliente`(`RucCli`, `NomCli`, `ApelCli`, `DirCli`, `TlfCli`, `EmailCli`, `Activo`) VALUES ('" + txtCedulaCli.getText() + "','" + txtNomCli.getText() + "','" + txtApelCli.getText() + "','" + txtDirCli.getText() + "','" + txtTlfCli.getText() + "','" + txtEmailCli.getText() + "','" + txtActivoCli.getText() + "')";
 
         executeSqlQuery(query, "Inserted");
-
+        limpiarCampos();
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
 
     private void btnRegresar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresar1ActionPerformed
@@ -296,6 +322,10 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
         menu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresar1ActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -333,6 +363,7 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardarDatos;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegresar1;

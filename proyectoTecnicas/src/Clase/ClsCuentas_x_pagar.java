@@ -14,12 +14,16 @@ public class ClsCuentas_x_pagar {
     private int codCuenta;
     private double importe;
     private int noFactura;
+    private String fecha;
+    private int empresa;
     private int proveedor;
 
-    public ClsCuentas_x_pagar(int codCuenta, double importe, int noFactura, int proveedor) {
+    public ClsCuentas_x_pagar(int codCuenta, double importe, int noFactura, String fecha, int empresa, int proveedor) {
         this.codCuenta = codCuenta;
         this.importe = importe;
         this.noFactura = noFactura;
+        this.fecha = fecha;
+        this.empresa = empresa;
         this.proveedor = proveedor;
     }
 
@@ -47,6 +51,22 @@ public class ClsCuentas_x_pagar {
         this.noFactura = noFactura;
     }
 
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(int empresa) {
+        this.empresa = empresa;
+    }
+
     public int getProveedor() {
         return proveedor;
     }
@@ -56,6 +76,5 @@ public class ClsCuentas_x_pagar {
     }
 
 
-    
 
 }

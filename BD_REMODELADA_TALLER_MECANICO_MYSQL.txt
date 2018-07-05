@@ -3,7 +3,7 @@ CREATE TABLE usuario
   nombre VARCHAR(25) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
   passw VARCHAR(255),
-  fecha_registro DATETIME DEFAULT NOW() NOT NULL,
+  fecha_registro DATE NOT NULL,
   passadmin VARCHAR(255),
   tipousuario VARCHAR (60) NOT NULL,
   PRIMARY KEY (id)
@@ -102,7 +102,7 @@ CREATE TABLE empleado_encargado
  
 CREATE TABLE orden_trabajo
  (IdOrden VARCHAR (10) UNIQUE NOT NULL,
-  FechaHora_recepcion DATETIME DEFAULT NOW() NOT NULL,
+  FechaHora_recepcion DATE NOT NULL,
   Kilometraje NUMERIC (20) NOT NULL,
   Descripcion VARCHAR (500),
   Mano_de_obra DECIMAL (10,2) NOT NULL, 
@@ -148,8 +148,9 @@ CREATE TABLE det_fact
  
 CREATE TABLE cuenta_x_cobrar
 (CodCuenta INT NOT NULL,
- TipoCta CHAR NOT NULL,
+ Importe DECIMAL (10,2) NOT NULL,
  NoFact INT NOT NULL,
+ fecha_registro DATE NOT NULL,
  FOREIGN KEY (NoFact) REFERENCES cab_fact (NoFact),
  PRIMARY KEY (CodCuenta)
 );
@@ -159,6 +160,7 @@ CREATE TABLE cuenta_x_pagar
 (CodCuenta INT NOT NULL,
  Importe DECIMAL (10,2) NOT NULL,
  NoFact INT NOT NULL,
+ fecha_registro DATE NOT NULL,
  RucEmpre NUMERIC (20),
  RucProv NUMERIC (20) NOT NULL,
  FOREIGN KEY (RucEmpre) REFERENCES empresa (RucEmpre),

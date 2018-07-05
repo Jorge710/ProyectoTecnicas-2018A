@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -73,7 +75,24 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    
+    public static String fechaActual(){
+        Date fecha = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
+        
+        return formatoFecha.format(fecha);
+    }
 
+            /*limpiar campos*/
+    public void limpiarCampos() {
+
+        txtFecha.setText(null);
+        txtImporte.setText(null);
+        txtProveedor.setText(null);
+        txtReferencia.setText(null);
+        txtSaldo.setText(null);
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -97,6 +116,7 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
         txtImporte = new javax.swing.JTextField();
         btnAgregar = new javax.swing.JButton();
         cmbNumFactura = new javax.swing.JComboBox<>();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -132,6 +152,13 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
             }
         });
 
+        btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -149,6 +176,8 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAgregar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancelar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -199,7 +228,9 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnAgregar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregar)
+                    .addComponent(btnCancelar))
                 .addGap(36, 36, 36))
         );
 
@@ -250,8 +281,10 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void cmbNumFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNumFacturaActionPerformed
+        
         String i = (String) cmbNumFactura.getSelectedItem().toString();
 
+        txtFecha.setText(fechaActual());
         try {
             String sql = "SELECT `CodCuenta`, `Importe`, `NoFact`, `RucEmpre`, `RucProv` FROM `cuenta_x_pagar` WHERE NoFact = '" + i + "'";
             Statement st = cn.createStatement();
@@ -283,6 +316,10 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "ERROR");
         }
     }//GEN-LAST:event_cmbNumFacturaActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -321,6 +358,7 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbNumFactura;
     private javax.swing.JLabel jLabel1;

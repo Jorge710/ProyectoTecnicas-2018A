@@ -1,6 +1,6 @@
 INSERT INTO empresa VALUES(1723036552,'Mechanic AEJ','Ladron de Guevera E11-253, Quito 170517',297-6300);
 
-INSERT INTO `usuario` VALUES (NULL, 'Jorge', 'izajorge7@gmail.com', NULL, CURRENT_TIMESTAMP, '123jorge','Administrador');
+INSERT INTO `usuario` VALUES (NULL, 'Jorge', 'izajorge7@gmail.com', NULL, '2018-07-05', '123jorge', 'Administrador');
 
 INSERT INTO empleado VALUES(1236547854,'EDUARDO','CAIZA','Quito',2874102,'eduardo@gmail.com',1,1723036552),
 							(1736547854,'JUAN','CAIZA','Quito',098410189,'juan@hotmail.com',1,1723036552),
@@ -32,7 +32,7 @@ INSERT INTO servicio VALUES('','ABC de frenos',20),
 
 INSERT INTO `vehiculo` (`Placa`, `Tipo`, `Modelo`, `Color`, `RucCli`) VALUES ('ABC123', 'CAMIONETA', 'MAZDA', 'AZUL', '1325445789');
 
-INSERT INTO `cuenta_x_pagar` VALUES ('1', '1500', '1', '1723036552', '1154218795'),
-		   ('2', '2000', '2', '1723036552', '1554126584');
+INSERT INTO `cuenta_x_pagar`  VALUES ('1', '1000.50', '1', '2018-07-05', '1723036552', '1154218795'),
+					('2', '2000.00', '2','2018-07-05', '1723036552', '1554126584');
 
 

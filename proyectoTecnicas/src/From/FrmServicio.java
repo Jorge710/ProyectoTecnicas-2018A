@@ -85,6 +85,13 @@ public class FrmServicio extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    
+        /*limpiar campos*/
+    public void limpiarCampos() {
+        txtDescripcion.setText(null);
+        txtIdServ.setText(null);
+        txtPrecio.setText(null);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,6 +111,7 @@ public class FrmServicio extends javax.swing.JFrame {
         btnModificar = new javax.swing.JButton();
         txtIdServ = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblServicio = new javax.swing.JTable();
@@ -132,6 +140,13 @@ public class FrmServicio extends javax.swing.JFrame {
 
         jLabel3.setText("Id");
 
+        btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -144,6 +159,7 @@ public class FrmServicio extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCancelar)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -172,7 +188,9 @@ public class FrmServicio extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(btnModificar))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancelar)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         btnRegresar.setText("REGRESAR");
@@ -231,7 +249,7 @@ public class FrmServicio extends javax.swing.JFrame {
         String query = "INSERT INTO `servicio`(`IdServ`, `Descripcion`, `PrecioServ`) VALUES (NULL,'" + txtDescripcion.getText() + "','" + txtPrecio.getText() + "')";
 
         executeSqlQuery(query, "Inserted");
-
+        limpiarCampos();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -243,7 +261,7 @@ public class FrmServicio extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         String query = "UPDATE `servicio` SET `Descripcion`='" + txtDescripcion.getText() + "',`PrecioServ`='" + txtPrecio.getText() + "' WHERE `IdServ`='" + txtIdServ.getText() + "'";
         executeSqlQuery(query, "Updated");
-
+        limpiarCampos();
 
     }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -254,6 +272,10 @@ public class FrmServicio extends javax.swing.JFrame {
         txtDescripcion.setText(model.getValueAt(i, 1).toString());
         txtPrecio.setText(model.getValueAt(i, 2).toString());
     }//GEN-LAST:event_tblServicioMouseClicked
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -291,6 +313,7 @@ public class FrmServicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton jButton1;
