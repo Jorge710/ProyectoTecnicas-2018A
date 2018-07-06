@@ -233,7 +233,7 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                                     .addComponent(txtEmailCli)
                                     .addComponent(txtDirCli)
                                     .addComponent(txtTlfCli))))
-                        .addGap(173, 173, 173))))
+                        .addGap(185, 185, 185))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
