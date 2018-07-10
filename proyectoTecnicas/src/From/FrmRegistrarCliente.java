@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -143,6 +144,11 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                 "Cedula", "Nombre", "Apellido", "Dirección", "Correo", "Telefono", "Activo"
             }
         ));
+        tblCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClienteMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCliente);
 
         btnRegresar1.setText("REGRESAR");
@@ -326,6 +332,18 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void tblClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClienteMouseClicked
+        int i = tblCliente.getSelectedRow();
+        TableModel model = tblCliente.getModel();
+        txtCedulaCli.setText(model.getValueAt(i, 0).toString());
+        txtNomCli.setText(model.getValueAt(i, 1).toString());
+        txtApelCli.setText(model.getValueAt(i, 2).toString());
+        txtDirCli.setText(model.getValueAt(i, 3).toString());
+        txtTlfCli.setText(model.getValueAt(i, 4).toString());
+        txtEmailCli.setText(model.getValueAt(i, 5).toString());
+        txtActivoCli.setText(model.getValueAt(i, 6).toString());
+    }//GEN-LAST:event_tblClienteMouseClicked
 
     /**
      * @param args the command line arguments
