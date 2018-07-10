@@ -101,23 +101,35 @@ CREATE TABLE empleado_encargado
  );
  
 CREATE TABLE orden_trabajo
- (IdOrden VARCHAR (10) UNIQUE NOT NULL,
-  FechaHora_recepcion DATE NOT NULL,
+ (IdOrden NUMERIC (10) UNIQUE NOT NULL,
+  RucCli NUMERIC (20) NOT NULL,
+  Placa VARCHAR (10)  NOT NULL,
+  FechaHora_recepcion date NOT NULL,
   Kilometraje NUMERIC (20) NOT NULL,
-  Descripcion VARCHAR (500),
   Mano_de_obra DECIMAL (10,2) NOT NULL, 
   Otros DECIMAL (10,2) NOT NULL,
   Subtotal DECIMAL (10,2) NOT NULL,
   Iva DECIMAL (10,2) NOT NULL,
   Total DECIMAL (10,2) NOT NULL,
-  IdServ INT,
-  IdCargo NUMERIC (10),
-  FOREIGN KEY (IdCargo) REFERENCES empleado_encargado (IdCargo)
+  FOREIGN KEY (RucCli) REFERENCES cliente (RucCli)
 	ON UPDATE CASCADE,
-  FOREIGN KEY (IdServ) REFERENCES servicio (IdServ)
+  FOREIGN KEY (Placa) REFERENCES vehiculo (Placa)
 	ON UPDATE CASCADE,
   PRIMARY KEY (IdOrden)
   );
+
+
+CREATE TABLE det_ordenServicio 
+(IdOrdenServi NUMERIC (10) NOT NULL, 
+IdServ INT, 
+IdOrden  NUMERIC (10), 
+FOREIGN KEY (IdServ) REFERENCES servicio (IdServ)
+ ON UPDATE CASCADE, 
+ FOREIGN KEY (IdOrden) REFERENCES orden_trabajo (IdOrden)
+ ON UPDATE CASCADE, 
+ PRIMARY KEY (IdOrdenServi) 
+);
+
 
 
 CREATE TABLE cab_fact
@@ -138,7 +150,7 @@ CREATE TABLE det_fact
   Total DECIMAL (10,2) NOT NULL,
   NoFact INT not null,
   IdProd INT,
-  IdOrden VARCHAR (10),
+  IdOrden NUMERIC (10),
   FOREIGN KEY (NoFact) REFERENCES cab_fact (NoFact),
   FOREIGN KEY (IdProd) REFERENCES producto (IdProd),
   FOREIGN KEY (IdOrden) REFERENCES orden_trabajo (IdOrden),
