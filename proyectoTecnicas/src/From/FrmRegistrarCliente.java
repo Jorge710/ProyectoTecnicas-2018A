@@ -314,6 +314,10 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
 
         executeSqlQuery(query, "Updated");
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosActionPerformed
@@ -321,6 +325,10 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
 
         executeSqlQuery(query, "Inserted");
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
 
     private void btnRegresar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresar1ActionPerformed

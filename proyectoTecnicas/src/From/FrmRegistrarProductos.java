@@ -58,8 +58,6 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
         return prodList;
     }
 
-
-
     public void mostrarProductosTabla() {
         ArrayList<ClsProducto> list = getProductoList();
         DefaultTableModel model = (DefaultTableModel) tblProductos.getModel();
@@ -76,8 +74,6 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
 
         }
     }
-
-
 
     public void executeSqlQueryProducto(String query, String message) {
         Statement st;
@@ -99,17 +95,17 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
     }
 
     /*limpiar campos*/
-    public void limpiarCampos(){
-       
-       //datos del producto
-       txtIdProd.setText(null);
-       txtDescripcionProd.setText(null);
-       txtCantidadPod.setText(null);
-       txtCostoUnitProd.setText(null);
-       txtPrecioUnitProd.setText(null);
-       txtRucProv_prod.setText(null);
+    public void limpiarCampos() {
+
+        //datos del producto
+        txtIdProd.setText(null);
+        txtDescripcionProd.setText(null);
+        txtCantidadPod.setText(null);
+        txtCostoUnitProd.setText(null);
+        txtPrecioUnitProd.setText(null);
+        txtRucProv_prod.setText(null);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -323,14 +319,22 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
         executeSqlQueryProducto(query, "Updated");
 
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnModificar_productoActionPerformed
 
     private void btnGuardarDatos_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatos_productoActionPerformed
 
         String query = "INSERT INTO `producto` (`IdProd`, `Descripcion`, `Cantidad`, `CostoUnit`, `PrecioUnit`, `RucProv`) VALUES (NULL, '" + txtDescripcionProd.getText() + "', '" + txtCantidadPod.getText() + "', '" + txtCostoUnitProd.getText() + "', '" + txtPrecioUnitProd.getText() + "', '" + txtRucProv_prod.getText() + "');";
         executeSqlQueryProducto(query, "Inserted");
-        
+
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnGuardarDatos_productoActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed

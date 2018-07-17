@@ -35,6 +35,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
         btnRegistrarProducto = new javax.swing.JButton();
         btnRegistrarVehiculo = new javax.swing.JButton();
         btnRegistrarServicio = new javax.swing.JButton();
+        btnRegresar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +81,13 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
             }
         });
 
+        btnRegresar1.setText("REGRESAR");
+        btnRegresar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,7 +103,9 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
                     .addComponent(btnRegistrarEmpleado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRegistrarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRegistrarVehiculo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addComponent(btnRegresar1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,7 +113,8 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrarCliente)
-                    .addComponent(btnRegistrarEmpleado))
+                    .addComponent(btnRegistrarEmpleado)
+                    .addComponent(btnRegresar1))
                 .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrarProveedor)
@@ -154,6 +165,12 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegistrarServicioActionPerformed
 
+    private void btnRegresar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresar1ActionPerformed
+        FrmMenu menu = new FrmMenu();
+        menu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresar1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -196,5 +213,7 @@ public class FrmMenuRegistrar extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarProveedor;
     private javax.swing.JButton btnRegistrarServicio;
     private javax.swing.JButton btnRegistrarVehiculo;
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnRegresar1;
     // End of variables declaration//GEN-END:variables
 }

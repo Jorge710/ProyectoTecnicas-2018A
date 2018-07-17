@@ -299,12 +299,20 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         String query = "UPDATE `vehiculo` SET `Placa`='" + txtPlaca.getText() + "',`Tipo`='" + txtTipo.getText() + "',`Modelo`='" + txtModelo.getText() + "',`Color`='" + txtColor.getText() + "',`RucCli`='" + txtRucCliente.getText() + "' WHERE `Placa`='" + txtPlaca.getText() + "'";
         executeSqlQueryProducto(query, "Updated");
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosActionPerformed
         String query = "INSERT INTO `vehiculo` (`Placa`, `Tipo`, `Modelo`, `Color`, `RucCli`) VALUES ('" + txtPlaca.getText() + "','" + txtTipo.getText() + "','" + txtModelo.getText() + "','" + txtColor.getText() + "','" + txtRucCliente.getText() + "')";
         executeSqlQueryProducto(query, "Inserted");
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed

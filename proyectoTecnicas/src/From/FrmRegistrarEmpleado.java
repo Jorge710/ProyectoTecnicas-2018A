@@ -364,11 +364,15 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnModificarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProvActionPerformed
-        String query = "UPDATE `empleado` SET `RucProv`='" + txtCedulaEmpl.getText() + "',`NomProv`='" + txtNomEmpl.getText() + "',`ApelProv`='" + txtApelEmpl.getText() + "',`DirProv`='" + txtDirEmpl.getText() + "',`TlfProv`='" + txtTlfEmpl.getText() + "',`emailProv`='" + txtEmailEmpl.getText() + "',`Activo`='" + txtActivoEmpl.getText() + "' WHERE `RucProv`='" + txtCedulaEmpl.getText() + "'";
+        String query = "UPDATE `empleado` SET `RucEmpl`='" + txtCedulaEmpl.getText() + "',`NomEmpl`='" + txtNomEmpl.getText() + "',`ApelEmpl`='" + txtApelEmpl.getText() + "',`DirEmpl`='" + txtDirEmpl.getText() + "',`TlfEmpl`='" + txtTlfEmpl.getText() + "',`EmailEmpl`='" + txtEmailEmpl.getText() + "',`Activo`='" + txtActivoEmpl.getText() + "' WHERE `RucEmpl`='" + txtCedulaEmpl.getText() + "'";
 
         executeSqlQuery(query, "Updated");
 
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnModificarProvActionPerformed
 
     private void btnActivarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarProvActionPerformed
@@ -381,6 +385,10 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         executeSqlQuery(query, "Inserted");
 
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnGuardarDatosProvActionPerformed
 
     private void tblEmpleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpleadoMouseClicked

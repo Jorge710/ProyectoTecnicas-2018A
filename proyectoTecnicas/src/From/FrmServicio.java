@@ -31,7 +31,7 @@ public class FrmServicio extends javax.swing.JFrame {
         mostrarTablaServicio();
     }
 
-        /*Empleado*/
+    /*Empleado*/
     public ArrayList<ClsServicio> getUserList() {
         ArrayList<ClsServicio> usersList = new ArrayList<ClsServicio>();
         String query = "SELECT * FROM `servicio`";
@@ -85,8 +85,8 @@ public class FrmServicio extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
-        /*limpiar campos*/
+
+    /*limpiar campos*/
     public void limpiarCampos() {
         txtDescripcion.setText(null);
         txtIdServ.setText(null);
@@ -250,6 +250,10 @@ public class FrmServicio extends javax.swing.JFrame {
 
         executeSqlQuery(query, "Inserted");
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -262,6 +266,10 @@ public class FrmServicio extends javax.swing.JFrame {
         String query = "UPDATE `servicio` SET `Descripcion`='" + txtDescripcion.getText() + "',`PrecioServ`='" + txtPrecio.getText() + "' WHERE `IdServ`='" + txtIdServ.getText() + "'";
         executeSqlQuery(query, "Updated");
         limpiarCampos();
+
+        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        mr.setVisible(true);
+        this.dispose();
 
     }//GEN-LAST:event_btnModificarActionPerformed
 
