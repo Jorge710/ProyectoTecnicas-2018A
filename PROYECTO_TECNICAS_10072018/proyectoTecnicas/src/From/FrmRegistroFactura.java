@@ -30,15 +30,20 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     public static float totalFacturaConIVA= 0;
     public static float totalPorProducto= 0;
     public static int contador= 0;
+     public static int contadorTabla= 0;
+    
+    public static int numFact = 0;
     
 
    
     public FrmRegistroFactura() {
         initComponents();
-        mostrarDetalleFacturaTabla();
-        mostrarProductosComboProd();
-        inicializarCampos();
-        obtenerNummerodeRegustros();
+        //mostrarDetalleFacturaTabla();
+       // mostrarProductosComboProd();
+       inicializarCampos();
+       numeroFactura();
+      
+        //obtenerNummerodeRegustros();
        
         
     }
@@ -69,6 +74,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         
         cmbListaProdFact.setEnabled(false);
         cmbListaProdFact.setSelectedIndex(-1);
+        
+        cmbOrdenTrabajo.setEnabled(false);
+        cmbOrdenTrabajo.setSelectedIndex(-1);
+        
+        
    }
    
    public void LimpiarCampos(){
@@ -86,6 +96,9 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         txtSubtotalFact.setText("");
         txtIVAFact.setText("");
         txtTotalFact.setText("");
+        
+       
+        
    }
 
     public void mostrarDatos(String valor){
@@ -94,11 +107,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         try {
             
             
-            String sql = "SELECT * FROM CLIENTE WHERE CICLI = '" + valor + "'";
+            String sql = "SELECT * FROM CLIENTE WHERE RUCCLI = '" + valor + "'";
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
-            String datos[] = new String[6];
+            String datos[] = new String[7];
 
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -107,6 +120,7 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 datos[3] = rs.getString(4);
                 datos[4] = rs.getString(5);
                 datos[5] = rs.getString(6);
+                datos[6] = rs.getString(7);
                 
             }
             
@@ -117,8 +131,8 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 txtNomCli.setText(datos[1]);
                 txtApelCLi.setText(datos[2]);
                 txtDirCli.setText(datos[3]);
-                txtEmailCli.setText(datos[4]);
-                txtTlfCli.setText(datos[5]);
+                txtEmailCli.setText(datos[5]);
+                txtTlfCli.setText(datos[4]);
 
                 // activo los campos de fecha y numero de factura 
                 
@@ -130,6 +144,20 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 btnLimpiarDatos.setEnabled(true);
                 btnCrearFactura.setEnabled(true);
                 
+                cmbOrdenTrabajo.setEnabled(true);
+                cmbOrdenTrabajo.setSelectedIndex(-1);
+                cargarDatosComboOrdenTrabajo();
+                
+                mostrarProductosComboProd();
+               
+                cmbListaProdFact.setEnabled(true);
+                btnAgregarProdFact.setEnabled(true);
+                
+               
+                
+                
+                
+                
                 
                 
             }else{
@@ -139,12 +167,14 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
             }
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "ERROR");
+            JOptionPane.showMessageDialog(null, "ERROR "+ ex);
         }
         
     }
     
-     public void mostrarDetalleFacturaTabla(){
+     public void mostrarDetalleFacturaTabla(String idOrden){
+         double subTotal = 0.00;
+         contadorTabla=0;
         
         modelo = new DefaultTableModel(){
             @Override
@@ -155,13 +185,50 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         };
         
         modelo.addColumn("CANTIDAD ");
-        modelo.addColumn("DETALLE PRODUCTO ");
+        modelo.addColumn("DETALLE PRODUCTO O SERVICIO ");
         modelo.addColumn("PRECIO UNITARIO");   
         modelo.addColumn("TOTAL");
         tblFactura.setModel(modelo);
         
-       
-        
+         try {
+             String sql = "SELECT ser.Descripcion, ser.PrecioServ,Otros,Subtotal,Iva,Total FROM orden_trabajo ord, det_ordenservicio dor, servicio ser\n"
+                     + "where ord.IdOrden = dor.IdOrden and ser.IdServ = dor.IdServ and ord.IdOrden = '" + idOrden + "'";
+             
+             Statement st = cn.createStatement();
+             ResultSet rs = st.executeQuery(sql);
+             
+            String datos[] = new String[4];
+            String valores[] = new String[4];
+
+            while (rs.next()) {
+                contadorTabla = contadorTabla + 1;
+                datos[0] = "1";
+                datos[1] = rs.getString(1);
+                datos[2] = rs.getString(2);
+                datos[3] = rs.getString(2);
+                valores[0] = rs.getString(3);
+                valores[1] = rs.getString(4);
+                valores[2] = rs.getString(5);
+                valores[3] = rs.getString(6);
+                
+                modelo.addRow(datos);
+            }
+            
+            subTotal = Double.valueOf(valores[1])+ Double.valueOf(valores[0]);
+            txtSubtotalFact.setText(String.valueOf(subTotal));
+            txtIVAFact.setText(valores[2]);
+            txtTotalFact.setText( valores[3]);
+                    
+           
+            
+            
+             
+             
+         } catch (Exception e) {
+             System.out.println("EROROR"+e);
+         }
+
+  
     }
      
      public static boolean validarFecha(String fecha) {
@@ -216,14 +283,10 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
        
         try{
             Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM PRODUCTOS");
+            ResultSet rs = st.executeQuery("SELECT * FROM PRODUCTO");
             while(rs.next()){
-               
-                datosProd[0] = rs.getString(1);
-                datosProd[1] = rs.getString(3);
-                datosProd[2] = rs.getString(2);
-                
-                cmbListaProdFact.addItem(datosProd[1]);
+                datosProd[0] = rs.getString(2);
+                cmbListaProdFact.addItem(datosProd[0]);
                 
             }
             
@@ -313,6 +376,29 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         
         
     }
+    
+    public void cargarDatosComboOrdenTrabajo(){
+        
+        String numCed = txtCedCli.getText();
+        
+        try {
+         
+            String sql = "SELECT IDORDEN FROM ORDEN_TRABAJO WHERE RUCCLI = '" + numCed + "'";
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            String datos[] = new String[1];
+
+            while (rs.next()) {
+                datos[0] = rs.getString(1);
+                cmbOrdenTrabajo.addItem(datos[0]);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmRegistroFactura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
         @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -336,6 +422,8 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         btnLimpiarDatos = new javax.swing.JButton();
         jLabel23 = new javax.swing.JLabel();
         btnCrearFactura = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        cmbOrdenTrabajo = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         txtCantProdFact = new javax.swing.JTextField();
@@ -358,7 +446,6 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         txtNumeroFactura = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -420,6 +507,14 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("Orden Trab N°: ");
+
+        cmbOrdenTrabajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbOrdenTrabajoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -442,17 +537,22 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                             .addComponent(txtFechaFact))
                         .addGap(42, 42, 42)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel5))
-                            .addComponent(jLabel6))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtEmailCli)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(txtTlfCli, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
-                            .addComponent(txtApelCLi)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel5))
+                                    .addComponent(jLabel6))
+                                .addGap(42, 42, 42)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtApelCLi, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtTlfCli, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                                        .addComponent(txtEmailCli, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cmbOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jLabel23))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -495,10 +595,12 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtFechaFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnLimpiarDatos)))
+                        .addComponent(btnLimpiarDatos)
+                        .addComponent(jLabel8)
+                        .addComponent(cmbOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel23)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -670,12 +772,10 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(txtNumeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Img_tienda-online.png"))); // NOI18N
 
         jLabel7.setText("MECANICA AUTOMOTRIZ AG");
 
@@ -690,9 +790,7 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addContainerGap(86, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel11)
                     .addComponent(jLabel10)
@@ -704,20 +802,15 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel8))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel11)))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addComponent(jLabel7)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel11)
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoEmpresa.jpg"))); // NOI18N
@@ -744,7 +837,7 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -755,9 +848,13 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnRegresar))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(438, 438, 438)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -766,16 +863,18 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 5, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnRegresar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -862,7 +961,26 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnAgregarProdFactActionPerformed
 
-    
+     public void numeroFactura (){  
+         
+          try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT max(NOFACT) FROM CAB_FACT");
+            
+            while (rs.next()) {
+                 numFact  = Integer.parseInt(rs.getString(1));
+            }
+            
+            numFact = numFact+1; 
+            
+            txtNumeroFactura.setText(String.valueOf(numFact));
+            
+            
+        } catch (Exception ex) {
+            numFact = 1;
+            txtNumeroFactura.setText(String.valueOf(numFact));
+        }
+     }
     
     private void btnCrearFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearFacturaActionPerformed
         
@@ -928,6 +1046,16 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbListaProdFactActionPerformed
 
+    private void cmbOrdenTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOrdenTrabajoActionPerformed
+       if(cmbOrdenTrabajo.getSelectedIndex()!=-1){
+        String idOrden = (String)cmbOrdenTrabajo.getSelectedItem();
+        mostrarDetalleFacturaTabla(idOrden);
+       }else{
+           
+       }
+           
+    }//GEN-LAST:event_cmbOrdenTrabajoActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -979,6 +1107,7 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiarDatos;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbListaProdFact;
+    private javax.swing.JComboBox<String> cmbOrdenTrabajo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

@@ -34,6 +34,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
     double iva = 0.0;
     double total = 0.0;
     int numIdOrden =0;
+    int numIdOrdenServ =0;
     
     
     public FrmOrdenTrabajo() {
@@ -212,7 +213,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         txtTotal.setText(String.valueOf(total));
     }
      
-     public void numeroOrdenTrab (){
+     public void numeroOrdenTrab (){  
          
           try {
             Statement st = cn.createStatement();
@@ -233,6 +234,49 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         }
      }
      
+      public void numeroOrdenServicio (){
+         
+          try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT max(IdOrdenServi) FROM det_ordenservicio");
+            
+            while (rs.next()) {
+                 numIdOrdenServ   = Integer.parseInt(rs.getString(1));
+            }
+            
+            numIdOrdenServ  = numIdOrdenServ +1;
+            
+            
+        } catch (Exception ex) {
+            numIdOrdenServ  = 1;
+        }
+     }
+     
+     public void cargarServiciosOrdenBDD(ArrayList<ClsServicio> listServicio) {
+        int idServicio = 0;
+        String idOrden = txtNumIdOrden.getText();
+
+        for (ClsServicio servicio : listServicio) {
+            idServicio = servicio.getIdservicio();
+            System.out.println("IdServicio "+idServicio);
+            
+            
+            try {
+                PreparedStatement pst = cn.prepareStatement("INSERT INTO DET_ORDENSERVICIO (IDORDENSERVI,IDSERV,IDORDEN) VALUES (?,?,?)");
+                
+                pst.setString(1, String.valueOf(numIdOrdenServ));
+                pst.setString(2, String.valueOf(idServicio));
+                pst.setString(3, idOrden);
+                pst.executeUpdate();
+            } catch (Exception e) {
+                System.out.println("ERROR "+ e);
+            }
+
+            numeroOrdenServicio();
+            System.out.println("Numero de Orden de SERVICIO "+numIdOrdenServ);
+        }
+
+    }
      
      
      
@@ -276,6 +320,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         txtIva = new javax.swing.JTextField();
         btnGuardarOrdenTrabajo = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
         btnCargarDatos = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
@@ -384,7 +429,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(txtFechRecepVeh)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtKilomVeh))
@@ -466,6 +511,13 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("PROBAR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -496,9 +548,15 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
                                 .addGap(28, 28, 28)
                                 .addComponent(txtManoDeObra, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnGuardarOrdenTrabajo)
-                .addContainerGap(455, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnGuardarOrdenTrabajo)
+                        .addContainerGap(455, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(172, 172, 172))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -513,14 +571,19 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
                     .addComponent(jLabel12)
                     .addComponent(txtOtros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(txtIva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(txtIva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(13, 13, 13)))
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -695,15 +758,12 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(txtNumIdOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnRegresar)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(txtNumIdOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnRegresar))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(9, 9, 9)
@@ -727,6 +787,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         FrmMenu menu = new FrmMenu();
         menu.setVisible(true);
         this.dispose();
+        
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnGuardarOrdenTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarOrdenTrabajoActionPerformed
@@ -766,19 +827,19 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
                     pst.setString(9, iva);
                     pst.setString(10, total);
                     
+                    
                     if (listServicio.size()!=0) {
                         pst.executeUpdate();
                         JOptionPane.showMessageDialog(rootPane, "ORDEN REGISTRADA EXITOSAMENTE");
-
-                        inicializarCampos();
                         cmbServicios.removeAllItems();
                         llenarComboServicio();
-                        System.out.println("lista " + listServicio.size());
-                        System.out.println("*****");
+                        cargarServiciosOrdenBDD(listServicio);
+                        inicializarCampos();
 
                         for (int i = 0; i < listServicio.size(); i++) {
                             modelo.removeRow(0);
                         }
+                        
                         listServicio.removeAll(listServicio);
                         System.out.println(listServicio);
                     }else{
@@ -871,6 +932,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
                     txtFechRecepVeh.setText(fecha);
 
                     numeroOrdenTrab();
+                    numeroOrdenServicio();
                     cargarCampos();
                     
                 } else {
@@ -999,6 +1061,26 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIvaActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       
+        int idServicio = 0;
+        
+            
+            try {
+                PreparedStatement pst1 = cn.prepareStatement("INSERT INTO DET_ORDENSERVICIO (IDORDENSERVI,IDSERV,IDORDEN) VALUES (?,?,?)");
+                
+                pst1.setString(1,"1");
+                pst1.setString(2, "2");
+                pst1.setString(3, "2");
+                
+                
+                
+            } catch (Exception e) {
+                System.out.println("ERROR "+ e);
+            }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -1046,6 +1128,7 @@ public class FrmOrdenTrabajo extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarOrdenTrabajo;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbServicios;
+    private javax.swing.JButton jButton1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
