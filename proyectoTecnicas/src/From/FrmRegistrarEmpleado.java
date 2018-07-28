@@ -30,7 +30,6 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         this.setTitle("Registrar Empleado");
         txtRucEmpre.setEditable(false);
         llenarComboEmpleado();
-        mostrarTablaEmpleado();
     }
 
     /*Empleado*/
@@ -55,35 +54,14 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         return usersList;
     }
 
-    public void mostrarTablaEmpleado() {
-        ArrayList<ClsEmpleado> list = getUserList();
-        DefaultTableModel model = (DefaultTableModel) tblEmpleado.getModel();
-        Object[] row = new Object[8];
-        for (int i = 0; i < list.size(); i++) {
-            row[0] = list.get(i).getRucEmpl();
-            row[1] = list.get(i).getNomEmpl();
-            row[2] = list.get(i).getApelEmpl();
-            row[3] = list.get(i).getDirEmpl();
-            row[4] = list.get(i).getTlfEmpl();
-            row[5] = list.get(i).getEmailEmpl();
-            row[6] = list.get(i).getActivo();
-            row[7] = list.get(i).getRucEmpre();
 
-            model.addRow(row);
-
-        }
-    }
 
     public void executeSqlQuery(String query, String message) {
         Statement st;
         try {
             st = cn.createStatement();
             if (st.executeUpdate(query) == 1) {
-                /*refrescar la tabla*/
-                DefaultTableModel model = (DefaultTableModel) tblEmpleado.getModel();
-                model.setRowCount(0);
-                mostrarTablaEmpleado();
-                ////
+
                 JOptionPane.showMessageDialog(null, "Data" + message + "Succefully");
             } else {
                 JOptionPane.showMessageDialog(null, "Data Not" + message);
@@ -146,7 +124,6 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         txtEmailEmpl = new javax.swing.JTextField();
         txtTlfEmpl = new javax.swing.JTextField();
         btnModificarProv = new javax.swing.JButton();
-        btnActivarProv = new javax.swing.JButton();
         btnGuardarDatosProv = new javax.swing.JButton();
         txtActivoEmpl = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -154,8 +131,6 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         cmbRucEmpre = new javax.swing.JComboBox<>();
         txtRucEmpre = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblEmpleado = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -179,14 +154,6 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         btnModificarProv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarProvActionPerformed(evt);
-            }
-        });
-
-        btnActivarProv.setFont(new java.awt.Font("Times New Roman", 0, 10)); // NOI18N
-        btnActivarProv.setText("ACTIVAR PROVEEDOR");
-        btnActivarProv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActivarProvActionPerformed(evt);
             }
         });
 
@@ -254,9 +221,7 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
                             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel7Layout.createSequentialGroup()
                                     .addComponent(btnGuardarDatosProv)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnActivarProv)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGap(157, 157, 157)
                                     .addComponent(btnModificarProv, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel7Layout.createSequentialGroup()
                                     .addComponent(cmbRucEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -304,25 +269,9 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
                 .addGap(9, 9, 9)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarDatosProv)
-                    .addComponent(btnActivarProv)
                     .addComponent(btnModificarProv))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
-
-        tblEmpleado.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Ruc", "Nombre", "Apellido", "Direccion", "Telefono", "Correo", "Activo"
-            }
-        ));
-        tblEmpleado.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblEmpleadoMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblEmpleado);
 
         btnRegresar.setText("REGRESAR");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
@@ -337,12 +286,9 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegresar)))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+                .addComponent(btnRegresar)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -355,9 +301,7 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(btnRegresar)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -370,14 +314,10 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
 
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnModificarProvActionPerformed
-
-    private void btnActivarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarProvActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnActivarProvActionPerformed
 
     private void btnGuardarDatosProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosProvActionPerformed
         String query = "INSERT INTO `empleado`(`RucEmpl`, `NomEmpl`, `ApelEmpl`, `DirEmpl`, `TlfEmpl`, `EmailEmpl`, `Activo`, `RucEmpre`)VALUES ('" + txtCedulaEmpl.getText() + "','" + txtNomEmpl.getText() + "','" + txtApelEmpl.getText() + "','" + txtDirEmpl.getText() + "','" + txtTlfEmpl.getText() + "','" + txtEmailEmpl.getText() + "','" + txtActivoEmpl.getText() + "','" + txtRucEmpre.getText() + "')";
@@ -386,22 +326,10 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
 
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnGuardarDatosProvActionPerformed
-
-    private void tblEmpleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpleadoMouseClicked
-        int i = tblEmpleado.getSelectedRow();
-        TableModel model = tblEmpleado.getModel();
-        txtCedulaEmpl.setText(model.getValueAt(i, 0).toString());
-        txtNomEmpl.setText(model.getValueAt(i, 1).toString());
-        txtApelEmpl.setText(model.getValueAt(i, 2).toString());
-        txtDirEmpl.setText(model.getValueAt(i, 3).toString());
-        txtTlfEmpl.setText(model.getValueAt(i, 4).toString());
-        txtEmailEmpl.setText(model.getValueAt(i, 5).toString());
-        txtActivoEmpl.setText(model.getValueAt(i, 6).toString());
-    }//GEN-LAST:event_tblEmpleadoMouseClicked
 
     private void cmbRucEmpreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRucEmpreActionPerformed
         String i = (String) cmbRucEmpre.getSelectedItem().toString();
@@ -454,7 +382,6 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActivarProv;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardarDatosProv;
     private javax.swing.JButton btnModificarProv;
@@ -469,8 +396,6 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblEmpleado;
     private javax.swing.JTextField txtActivoEmpl;
     private javax.swing.JTextField txtApelEmpl;
     private javax.swing.JTextField txtCedulaEmpl;

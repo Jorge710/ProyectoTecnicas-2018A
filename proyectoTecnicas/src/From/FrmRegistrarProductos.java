@@ -320,7 +320,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
 
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnModificar_productoActionPerformed
@@ -332,7 +332,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
 
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnGuardarDatos_productoActionPerformed

@@ -27,7 +27,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
         this.setTitle("Registrar Vehiculo");
-        mostrarVehiculosTabla();
     }
 
     /*Producto*/
@@ -52,32 +51,13 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         return vehiList;
     }
 
-    public void mostrarVehiculosTabla() {
-        ArrayList<ClsVehiculo> list = getProductoList();
-        DefaultTableModel model = (DefaultTableModel) tblVehiculo.getModel();
-        Object[] row = new Object[6];
-        for (int i = 0; i < list.size(); i++) {
-            row[0] = list.get(i).getPlaca();
-            row[1] = list.get(i).getTipo();
-            row[2] = list.get(i).getModelo();
-            row[3] = list.get(i).getColor();
-            row[4] = list.get(i).getRuccli();
 
-            model.addRow(row);
-
-        }
-    }
 
     public void executeSqlQueryProducto(String query, String message) {
         Statement st;
         try {
             st = cn.createStatement();
             if (st.executeUpdate(query) == 1) {
-                /*refrescar la tabla*/
-                DefaultTableModel model = (DefaultTableModel) tblVehiculo.getModel();
-                model.setRowCount(0);
-                mostrarVehiculosTabla();
-                ////
                 JOptionPane.showMessageDialog(null, "Data" + message + "Succefully");
             } else {
                 JOptionPane.showMessageDialog(null, "Data Not" + message);
@@ -114,7 +94,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         txtPlaca = new javax.swing.JTextField();
         txtTipo = new javax.swing.JTextField();
         txtModelo = new javax.swing.JTextField();
-        btnModificar = new javax.swing.JButton();
         btnGuardarDatos = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         txtColor = new javax.swing.JTextField();
@@ -123,8 +102,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblVehiculo = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,14 +112,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         jLabel2.setText("Tipo:");
 
         jLabel3.setText("Modelo:");
-
-        btnModificar.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
-        btnModificar.setText("MODIFICAR");
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
-            }
-        });
 
         btnGuardarDatos.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
         btnGuardarDatos.setText("GUARDAR DATOS");
@@ -204,9 +173,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(88, 88, 88)
                                 .addComponent(btnGuardarDatos)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(128, 128, 128)
                                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -239,28 +206,12 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarDatos)
-                    .addComponent(btnModificar)
                     .addComponent(btnCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel7.setFont(new java.awt.Font("AR JULIAN", 1, 24)); // NOI18N
         jLabel7.setText("REGISTRO DE VEHICULOS");
-
-        tblVehiculo.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Placa", "Tipo", "Modelo", "Color", "Ruc Cliente"
-            }
-        ));
-        tblVehiculo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblVehiculoMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblVehiculo);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -269,16 +220,12 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(114, 114, 114)
-                                .addComponent(jLabel7)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(114, 114, 114)
+                        .addComponent(jLabel7)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,30 +234,18 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(28, 28, 28)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        String query = "UPDATE `vehiculo` SET `Placa`='" + txtPlaca.getText() + "',`Tipo`='" + txtTipo.getText() + "',`Modelo`='" + txtModelo.getText() + "',`Color`='" + txtColor.getText() + "',`RucCli`='" + txtRucCliente.getText() + "' WHERE `Placa`='" + txtPlaca.getText() + "'";
-        executeSqlQueryProducto(query, "Updated");
-        limpiarCampos();
-
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
-        mr.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnModificarActionPerformed
-
     private void btnGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosActionPerformed
         String query = "INSERT INTO `vehiculo` (`Placa`, `Tipo`, `Modelo`, `Color`, `RucCli`) VALUES ('" + txtPlaca.getText() + "','" + txtTipo.getText() + "','" + txtModelo.getText() + "','" + txtColor.getText() + "','" + txtRucCliente.getText() + "')";
         executeSqlQueryProducto(query, "Inserted");
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
@@ -320,16 +255,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         menu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
-
-    private void tblVehiculoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVehiculoMouseClicked
-        int i = tblVehiculo.getSelectedRow();
-        TableModel model = tblVehiculo.getModel();
-        txtPlaca.setText(model.getValueAt(i, 0).toString());
-        txtTipo.setText(model.getValueAt(i, 1).toString());
-        txtModelo.setText(model.getValueAt(i, 2).toString());
-        txtColor.setText(model.getValueAt(i, 3).toString());
-        txtRucCliente.setText(model.getValueAt(i, 4).toString());
-    }//GEN-LAST:event_tblVehiculoMouseClicked
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiarCampos();
@@ -373,7 +298,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardarDatos;
-    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -382,8 +306,6 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblVehiculo;
     private javax.swing.JTextField txtColor;
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextField txtPlaca;

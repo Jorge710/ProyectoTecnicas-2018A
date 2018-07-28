@@ -251,7 +251,7 @@ public class FrmServicio extends javax.swing.JFrame {
         executeSqlQuery(query, "Inserted");
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -267,7 +267,7 @@ public class FrmServicio extends javax.swing.JFrame {
         executeSqlQuery(query, "Updated");
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
 

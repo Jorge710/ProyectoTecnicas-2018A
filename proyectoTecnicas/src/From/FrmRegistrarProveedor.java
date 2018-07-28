@@ -27,7 +27,7 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
     public FrmRegistrarProveedor() {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
-        mostrarProveedoresTabla();
+
     }
 
     /*Proveedor*/
@@ -52,34 +52,12 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
         return usersList;
     }
 
-    public void mostrarProveedoresTabla() {
-        ArrayList<ClsProveedor> list = getUserList();
-        DefaultTableModel model = (DefaultTableModel) tablaProveedor.getModel();
-        Object[] row = new Object[7];
-        for (int i = 0; i < list.size(); i++) {
-            row[0] = list.get(i).getRucProv();
-            row[1] = list.get(i).getNomProv();
-            row[2] = list.get(i).getApelProv();
-            row[3] = list.get(i).getDirProv();
-            row[4] = list.get(i).getTlfProv();
-            row[5] = list.get(i).getEmailProv();
-            row[6] = list.get(i).getActivo();
-
-            model.addRow(row);
-
-        }
-    }
 
     public void executeSqlQuery(String query, String message) {
         Statement st;
         try {
             st = cn.createStatement();
             if (st.executeUpdate(query) == 1) {
-                /*refrescar la tabla*/
-                DefaultTableModel model = (DefaultTableModel) tablaProveedor.getModel();
-                model.setRowCount(0);
-                mostrarProveedoresTabla();
-                ////
                 JOptionPane.showMessageDialog(null, "Data" + message + "Succefully");
             } else {
                 JOptionPane.showMessageDialog(null, "Data Not" + message);
@@ -124,14 +102,10 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
         txtDirProv = new javax.swing.JTextField();
         txtEmailProv = new javax.swing.JTextField();
         txtTlfProv = new javax.swing.JTextField();
-        btnModificarProv = new javax.swing.JButton();
-        btnActivarProv = new javax.swing.JButton();
         btnGuardarDatosProv = new javax.swing.JButton();
         txtActivoProv = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablaProveedor = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -149,22 +123,6 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
         jLabel11.setText("Email Proveedor: ");
 
         jLabel12.setText("Telf Proveedor");
-
-        btnModificarProv.setFont(new java.awt.Font("Times New Roman", 0, 10)); // NOI18N
-        btnModificarProv.setText("MODIFICAR");
-        btnModificarProv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarProvActionPerformed(evt);
-            }
-        });
-
-        btnActivarProv.setFont(new java.awt.Font("Times New Roman", 0, 10)); // NOI18N
-        btnActivarProv.setText("ACTIVAR PROVEEDOR");
-        btnActivarProv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActivarProvActionPerformed(evt);
-            }
-        });
 
         btnGuardarDatosProv.setFont(new java.awt.Font("Times New Roman", 0, 10)); // NOI18N
         btnGuardarDatosProv.setText("GUARDAR DATOS");
@@ -191,9 +149,7 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(150, 150, 150)
-                        .addComponent(btnGuardarDatosProv)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnActivarProv))
+                        .addComponent(btnGuardarDatosProv))
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel7Layout.createSequentialGroup()
                             .addGap(27, 27, 27)
@@ -221,10 +177,8 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                             .addGap(150, 150, 150)
                             .addComponent(txtActivoProv, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnModificarProv, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(88, 88, 88)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -265,27 +219,9 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancelar)
                         .addGap(5, 5, 5)))
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnActivarProv)
-                    .addComponent(btnGuardarDatosProv)
-                    .addComponent(btnModificarProv))
+                .addComponent(btnGuardarDatosProv)
                 .addContainerGap(23, Short.MAX_VALUE))
         );
-
-        tablaProveedor.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Ruc", "Nombre", "Apellido", "Direccion", "Telefono", "Correo", "Activo"
-            }
-        ));
-        tablaProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaProveedorMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tablaProveedor);
 
         btnRegresar.setText("REGRESAR");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
@@ -300,12 +236,9 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegresar)))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addComponent(btnRegresar)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -315,29 +248,11 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRegresar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnModificarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProvActionPerformed
-        String query = "UPDATE `proveedor` SET `RucProv`='" + txtCedulaProv.getText() + "',`NomProv`='" + txtNomProv.getText() + "',`ApelProv`='" + txtApelProv.getText() + "',`DirProv`='" + txtDirProv.getText() + "',`TlfProv`='" + txtTlfProv.getText() + "',`emailProv`='" + txtEmailProv.getText() + "',`Activo`='" + txtActivoProv.getText() + "' WHERE `RucProv`='" + txtCedulaProv.getText() + "'";
-
-        executeSqlQuery(query, "Updated");
-
-        limpiarCampos();
-
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
-        mr.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnModificarProvActionPerformed
-
-    private void btnActivarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarProvActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnActivarProvActionPerformed
 
     private void btnGuardarDatosProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosProvActionPerformed
         String query = "INSERT INTO `proveedor`(`RucProv`, `NomProv`, `ApelProv`, `DirProv`, `TlfProv`, `EmailProv`, `Activo `) VALUES ('" + txtCedulaProv.getText() + "','" + txtNomProv.getText() + "','" + txtApelProv.getText() + "','" + txtDirProv.getText() + "','" + txtTlfProv.getText() + "','" + txtEmailProv.getText() + "','" + txtActivoProv.getText() + "')";
@@ -346,22 +261,10 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
 
         limpiarCampos();
 
-        FrmMenuRegistrar mr = new FrmMenuRegistrar();
+        FrmMenu mr = new FrmMenu();
         mr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnGuardarDatosProvActionPerformed
-
-    private void tablaProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProveedorMouseClicked
-        int i = tablaProveedor.getSelectedRow();
-        TableModel model = tablaProveedor.getModel();
-        txtCedulaProv.setText(model.getValueAt(i, 0).toString());
-        txtNomProv.setText(model.getValueAt(i, 1).toString());
-        txtApelProv.setText(model.getValueAt(i, 2).toString());
-        txtDirProv.setText(model.getValueAt(i, 3).toString());
-        txtTlfProv.setText(model.getValueAt(i, 4).toString());
-        txtEmailProv.setText(model.getValueAt(i, 5).toString());
-        txtActivoProv.setText(model.getValueAt(i, 6).toString());
-    }//GEN-LAST:event_tablaProveedorMouseClicked
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         FrmMenu menu = new FrmMenu();
@@ -409,10 +312,8 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActivarProv;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardarDatosProv;
-    private javax.swing.JButton btnModificarProv;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -422,8 +323,6 @@ public class FrmRegistrarProveedor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tablaProveedor;
     private javax.swing.JTextField txtActivoProv;
     private javax.swing.JTextField txtApelProv;
     private javax.swing.JTextField txtCedulaProv;
