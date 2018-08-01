@@ -130,6 +130,17 @@ FOREIGN KEY (IdServ) REFERENCES servicio (IdServ)
  PRIMARY KEY (IdOrdenServi) 
 );
 
+CREATE TABLE det_ordenProducto
+(IdOrdenProducto NUMERIC (10) NOT NULL, 
+IdProd INT, 
+IdOrden  NUMERIC (10), 
+FOREIGN KEY (IdProd) REFERENCES servicio (IdServ)
+ ON UPDATE CASCADE, 
+ FOREIGN KEY (IdProd) REFERENCES producto (IdProd)
+ ON UPDATE CASCADE, 
+ PRIMARY KEY (IdOrdenProducto) 
+);
+
 
 
 CREATE TABLE cab_fact

@@ -1,3 +1,4 @@
+
 package Clase;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ Connection conect = null;
       try {
              
            Class.forName("com.mysql.jdbc.Driver");
-           conect = DriverManager.getConnection("jdbc:mysql://localhost/tallerMecanico","root","");
+           conect = DriverManager.getConnection("jdbc:mysql://localhost/tallermecanico","root","");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Error "+e);
         }
