@@ -153,8 +153,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         txtCedulaCli = new javax.swing.JTextField();
         txtNomCli = new javax.swing.JTextField();
         txtApelCli = new javax.swing.JTextField();
-        btnGuardarDatos2 = new javax.swing.JButton();
-        btnCancelar2 = new javax.swing.JButton();
+        btnGuardarDatosCli_Jdialogo = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -218,18 +217,11 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
             }
         });
 
-        btnGuardarDatos2.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
-        btnGuardarDatos2.setText("GUARDAR DATOS");
-        btnGuardarDatos2.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarDatosCli_Jdialogo.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
+        btnGuardarDatosCli_Jdialogo.setText("GUARDAR DATOS");
+        btnGuardarDatosCli_Jdialogo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarDatos2ActionPerformed(evt);
-            }
-        });
-
-        btnCancelar2.setText("CANCELAR");
-        btnCancelar2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelar2ActionPerformed(evt);
+                btnGuardarDatosCli_JdialogoActionPerformed(evt);
             }
         });
 
@@ -241,39 +233,32 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 75, Short.MAX_VALUE)
-                        .addComponent(btnGuardarDatos2)
-                        .addGap(121, 121, 121)
-                        .addComponent(btnCancelar2)
-                        .addGap(23, 23, 23))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel17))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCedulaCli, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(txtNomCli)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 94, Short.MAX_VALUE)
+                        .addComponent(txtApelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16)
-                                    .addComponent(jLabel17))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtCedulaCli, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                    .addComponent(txtNomCli)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(txtApelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel18)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel15)
-                                        .addComponent(jLabel6)))
-                                .addGap(14, 14, 14)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtActivoCli)
-                                    .addComponent(txtEmailCli)
-                                    .addComponent(txtDirCli)
-                                    .addComponent(txtTlfCli))))
-                        .addGap(185, 185, 185))))
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel15)
+                                .addComponent(jLabel6)))
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtActivoCli)
+                            .addComponent(txtEmailCli)
+                            .addComponent(txtDirCli)
+                            .addComponent(txtTlfCli)
+                            .addComponent(btnGuardarDatosCli_Jdialogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(20, 20, 20))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,38 +291,32 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(txtActivoCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardarDatos2)
-                    .addComponent(btnCancelar2))
-                .addGap(21, 21, 21))
+                .addGap(18, 18, 18)
+                .addComponent(btnGuardarDatosCli_Jdialogo)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
         jDialog1Layout.setHorizontalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 489, Short.MAX_VALUE)
-            .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jDialog1Layout.createSequentialGroup()
-                    .addGap(17, 17, 17)
-                    .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jDialog1Layout.createSequentialGroup()
-                            .addGap(135, 135, 135)
-                            .addComponent(jLabel14)))
-                    .addContainerGap(17, Short.MAX_VALUE)))
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jDialog1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel14)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jDialog1Layout.setVerticalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
-            .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel14)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -610,7 +589,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCedulaCliKeyTyped
 
-    private void btnGuardarDatos2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatos2ActionPerformed
+    private void btnGuardarDatosCli_JdialogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosCli_JdialogoActionPerformed
 
         try {
 
@@ -651,11 +630,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                     String query = "INSERT INTO `cliente`(`RucCli`, `NomCli`, `ApelCli`, `DirCli`, `TlfCli`, `EmailCli`, `Activo`) VALUES ('" + txtCedulaCli.getText() + "','" + txtNomCli.getText() + "','" + txtApelCli.getText() + "','" + txtDirCli.getText() + "','" + txtTlfCli.getText() + "','" + txtEmailCli.getText() + "','" + txtActivoCli.getText() + "')";
 
                     executeSqlQuery(query, "Inserted");
-                    limpiarCampos();
-
-                    FrmMenu mr = new FrmMenu();
-                    mr.setVisible(true);
-                    this.dispose();
+                    
                 } else {
                     JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO veri", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
                 }
@@ -673,11 +648,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
 
         }
 
-    }//GEN-LAST:event_btnGuardarDatos2ActionPerformed
-
-    private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
-        limpiarCampos();
-    }//GEN-LAST:event_btnCancelar2ActionPerformed
+    }//GEN-LAST:event_btnGuardarDatosCli_JdialogoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -716,10 +687,9 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnCancelar2;
     private javax.swing.JButton btnCrearCliente;
     private javax.swing.JButton btnGuardarDatos;
-    private javax.swing.JButton btnGuardarDatos2;
+    private javax.swing.JButton btnGuardarDatosCli_Jdialogo;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
