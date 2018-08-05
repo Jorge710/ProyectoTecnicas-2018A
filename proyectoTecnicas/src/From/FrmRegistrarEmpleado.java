@@ -11,6 +11,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -29,7 +32,7 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
         this.setTitle("Registrar Empleado");
         txtRucEmpre.setEditable(false);
-        llenarComboEmpleado();
+        conexion_consulta.conectar();
     }
 
     /*Empleado*/
@@ -54,8 +57,6 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         return usersList;
     }
 
-
-
     public void executeSqlQuery(String query, String message) {
         Statement st;
         try {
@@ -71,23 +72,21 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         }
     }
 
-    /*llenar combox */
-    public void llenarComboEmpleado() {
-        Statement st;
-        ResultSet rs;
 
-        try {
-            st = cn.createStatement();
-            rs = st.executeQuery("SELECT * FROM `empresa`");
-            while (rs.next()) {
-                this.cmbRucEmpre.addItem(rs.getString("RucEmpre"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        /*validar correo*/
+    public boolean isEmail(String correo) {
+        Pattern pat = null;
+        Matcher mat = null;
+        pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
+        mat = pat.matcher(correo);
+
+        if (mat.find()) {
+            return true;
+        } else {
+            return false;
         }
-
     }
-
+    
     /*limpiar campos*/
     public void limpiarCampos() {
 
@@ -123,37 +122,49 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
         txtDirEmpl = new javax.swing.JTextField();
         txtEmailEmpl = new javax.swing.JTextField();
         txtTlfEmpl = new javax.swing.JTextField();
-        btnModificarProv = new javax.swing.JButton();
         btnGuardarDatosProv = new javax.swing.JButton();
         txtActivoEmpl = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        cmbRucEmpre = new javax.swing.JComboBox<>();
         txtRucEmpre = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblEmpresa = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        txtNombre_empresa = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel7.setText("Cedula Proveedor: ");
+        jLabel7.setText("Cedula Empleado: ");
 
-        jLabel8.setText("Nombre Proveedor: ");
+        jLabel8.setText("Nombre Empleado: ");
 
-        jLabel9.setText("Apellido Proveedor: ");
+        jLabel9.setText("Apellido Empleado:");
 
-        jLabel10.setText("Dir Proveedor:");
+        jLabel10.setText("Dir Empleado:");
 
-        jLabel11.setText("Email Proveedor: ");
+        jLabel11.setText("Email Empleado: ");
 
-        jLabel12.setText("Telf Proveedor");
+        jLabel12.setText("Telf Empleado:");
 
-        btnModificarProv.setFont(new java.awt.Font("Times New Roman", 0, 10)); // NOI18N
-        btnModificarProv.setText("MODIFICAR");
-        btnModificarProv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarProvActionPerformed(evt);
+        txtCedulaEmpl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaEmplKeyTyped(evt);
+            }
+        });
+
+        txtEmailEmpl.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtEmailEmplFocusLost(evt);
+            }
+        });
+
+        txtTlfEmpl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTlfEmplKeyTyped(evt);
             }
         });
 
@@ -165,20 +176,44 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
             }
         });
 
-        jLabel13.setText("Activo:");
-
-        jLabel1.setText("Ruc Empresa:");
-
-        cmbRucEmpre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbRucEmpreActionPerformed(evt);
+        txtActivoEmpl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtActivoEmplKeyTyped(evt);
             }
         });
+
+        jLabel13.setText("Activo:");
 
         btnCancelar.setText("CANCELAR");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
+            }
+        });
+
+        tblEmpresa.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblEmpresa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEmpresaMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tblEmpresa);
+
+        jLabel4.setText("RUC EMPRESA");
+
+        txtNombre_empresa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNombre_empresaKeyReleased(evt);
             }
         });
 
@@ -189,45 +224,50 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
-                            .addComponent(jLabel7)
-                            .addGap(32, 32, 32)
-                            .addComponent(txtCedulaEmpl))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
-                            .addComponent(jLabel8)
-                            .addGap(26, 26, 26)
-                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtApelEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtNomEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtDirEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtEmailEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtTlfEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel9)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
-                            .addGap(123, 123, 123)
-                            .addComponent(txtActivoEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCancelar))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
-                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel12)
-                                .addComponent(jLabel11)
-                                .addComponent(jLabel13)
-                                .addComponent(jLabel1))
-                            .addGap(39, 39, 39)
-                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                    .addComponent(btnGuardarDatosProv)
-                                    .addGap(157, 157, 157)
-                                    .addComponent(btnModificarProv, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                    .addComponent(cmbRucEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtRucEmpre))))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addGap(32, 32, 32)
+                                    .addComponent(txtCedulaEmpl))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                    .addComponent(jLabel8)
+                                    .addGap(26, 26, 26)
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtApelEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtNomEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtDirEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtEmailEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtTlfEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel9))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                .addGap(123, 123, 123)
+                                .addComponent(txtActivoEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel13))
+                                .addGap(39, 39, 39)
+                                .addComponent(btnGuardarDatosProv)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(36, 36, 36)
+                                        .addComponent(txtNombre_empresa, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtRucEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 10, Short.MAX_VALUE))))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,21 +296,22 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(txtTlfEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtActivoEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13)
-                    .addComponent(btnCancelar))
-                .addGap(19, 19, 19)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cmbRucEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtRucEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtActivoEmpl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtNombre_empresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRucEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarDatosProv)
-                    .addComponent(btnModificarProv))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addComponent(btnCancelar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnRegresar.setText("REGRESAR");
@@ -280,14 +321,23 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
             }
         });
 
+        jLabel14.setFont(new java.awt.Font("AR JULIAN", 1, 24)); // NOI18N
+        jLabel14.setText("REGISTRAR EMPLEADO");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel14)
+                        .addGap(127, 127, 127)))
                 .addComponent(btnRegresar)
                 .addContainerGap())
         );
@@ -296,45 +346,84 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(65, 65, 65)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(btnRegresar)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addGap(13, 13, 13)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRegresar)
+                            .addComponent(jLabel14))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnModificarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProvActionPerformed
-        String query = "UPDATE `empleado` SET `RucEmpl`='" + txtCedulaEmpl.getText() + "',`NomEmpl`='" + txtNomEmpl.getText() + "',`ApelEmpl`='" + txtApelEmpl.getText() + "',`DirEmpl`='" + txtDirEmpl.getText() + "',`TlfEmpl`='" + txtTlfEmpl.getText() + "',`EmailEmpl`='" + txtEmailEmpl.getText() + "',`Activo`='" + txtActivoEmpl.getText() + "' WHERE `RucEmpl`='" + txtCedulaEmpl.getText() + "'";
-
-        executeSqlQuery(query, "Updated");
-
-        limpiarCampos();
-
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnModificarProvActionPerformed
-
     private void btnGuardarDatosProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosProvActionPerformed
-        String query = "INSERT INTO `empleado`(`RucEmpl`, `NomEmpl`, `ApelEmpl`, `DirEmpl`, `TlfEmpl`, `EmailEmpl`, `Activo`, `RucEmpre`)VALUES ('" + txtCedulaEmpl.getText() + "','" + txtNomEmpl.getText() + "','" + txtApelEmpl.getText() + "','" + txtDirEmpl.getText() + "','" + txtTlfEmpl.getText() + "','" + txtEmailEmpl.getText() + "','" + txtActivoEmpl.getText() + "','" + txtRucEmpre.getText() + "')";
+        try {
 
-        executeSqlQuery(query, "Inserted");
+            //------- generacion de numeros randomicos -------//
+            Random num = new Random();
+            int N = num.nextInt(1000);
 
-        limpiarCampos();
+            String nom = txtNomEmpl.getText();
+            String apell = txtApelEmpl.getText();
+            String ci = txtCedulaEmpl.getText();
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+            if (nom.equals("") || apell.equals("") || ci.equals("")) {
+                JOptionPane.showMessageDialog(null, "INGRESE DATOS.", "ERROR!!", JOptionPane.ERROR_MESSAGE);
+
+            } else if (ci.length() == 10) {
+                int coef = 0, mult = 0, sum = 0, verificador = 0;
+                for (int i = 0; i < ci.length() - 1; i++) {
+                    if (i % 2 == 0) {
+                        coef = 2;
+                    } else {
+                        coef = 1;
+                    }
+                    mult = coef * Character.getNumericValue(ci.charAt(i));
+
+                    if (mult > 9) {
+                        mult = mult - 9;
+
+                    }
+
+                    sum += mult;
+                }
+
+                verificador = 10 - (sum % 10);
+
+                if (verificador == Character.getNumericValue(ci.charAt(ci.length() - 1))) {
+                    JOptionPane.showMessageDialog(null, "GUARDANDO USUARIO");
+                    System.out.println("registra");
+
+                    String query = "INSERT INTO `empleado`(`RucEmpl`, `NomEmpl`, `ApelEmpl`, `DirEmpl`, `TlfEmpl`, `EmailEmpl`, `Activo`, `RucEmpre`)VALUES ('" + txtCedulaEmpl.getText() + "','" + txtNomEmpl.getText() + "','" + txtApelEmpl.getText() + "','" + txtDirEmpl.getText() + "','" + txtTlfEmpl.getText() + "','" + txtEmailEmpl.getText() + "','" + txtActivoEmpl.getText() + "','" + txtRucEmpre.getText() + "')";
+
+                    executeSqlQuery(query, "Inserted");
+
+                    limpiarCampos();
+
+                    FrmMenu mr = new FrmMenu();
+                    mr.setVisible(true);
+                    this.dispose();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO veri", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO.", "ERROR!!", JOptionPane.WARNING_MESSAGE);// longitud cedula
+            }
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(null, nfe);
+            //nfe.printStackTrace();
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("No ingresaste un numero." + e.getMessage());
+            JOptionPane.showMessageDialog(null, e);
+
+        }
     }//GEN-LAST:event_btnGuardarDatosProvActionPerformed
-
-    private void cmbRucEmpreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRucEmpreActionPerformed
-        String i = (String) cmbRucEmpre.getSelectedItem().toString();
-        txtRucEmpre.setText(i);
-    }//GEN-LAST:event_cmbRucEmpreActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         FrmMenu menu = new FrmMenu();
@@ -345,6 +434,66 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void tblEmpresaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpresaMouseClicked
+        int i = tblEmpresa.getSelectedRow();
+        TableModel model = tblEmpresa.getModel();
+        txtRucEmpre.setText(model.getValueAt(i, 0).toString());
+    }//GEN-LAST:event_tblEmpresaMouseClicked
+
+    private void txtNombre_empresaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombre_empresaKeyReleased
+        String Nombre = txtNombre_empresa.getText();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Cédula");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Dirección");
+        modelo.addColumn("Telefono");
+        ArrayList<Object[]> datos = new ArrayList<Object[]>();
+        datos = conexion_consulta.buscar_empresa_tabla(Nombre);
+        for (int i = 0; i < datos.size(); i++) {
+            modelo.addRow(datos.get(i));
+        }
+        tblEmpresa.setModel(modelo);
+    }//GEN-LAST:event_txtNombre_empresaKeyReleased
+
+    private void txtCedulaEmplKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaEmplKeyTyped
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "SOLO NUMEROS", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtCedulaEmplKeyTyped
+
+    private void txtTlfEmplKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTlfEmplKeyTyped
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "SOLO NUMEROS", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtTlfEmplKeyTyped
+
+    private void txtActivoEmplKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActivoEmplKeyTyped
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "SOLO NUMEROS", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtActivoEmplKeyTyped
+
+    private void txtEmailEmplFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailEmplFocusLost
+        if (isEmail(txtEmailEmpl.getText())) {
+
+        } else {
+            JOptionPane.showMessageDialog(null, "EMAIL INCORRECTO.", "ERROR!!", JOptionPane.ERROR_MESSAGE);
+            txtEmailEmpl.setText("");
+        }
+    }//GEN-LAST:event_txtEmailEmplFocusLost
 
     /**
      * @param args the command line arguments
@@ -384,24 +533,26 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardarDatosProv;
-    private javax.swing.JButton btnModificarProv;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> cmbRucEmpre;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTable tblEmpresa;
     private javax.swing.JTextField txtActivoEmpl;
     private javax.swing.JTextField txtApelEmpl;
     private javax.swing.JTextField txtCedulaEmpl;
     private javax.swing.JTextField txtDirEmpl;
     private javax.swing.JTextField txtEmailEmpl;
     private javax.swing.JTextField txtNomEmpl;
+    private javax.swing.JTextField txtNombre_empresa;
     private javax.swing.JTextField txtRucEmpre;
     private javax.swing.JTextField txtTlfEmpl;
     // End of variables declaration//GEN-END:variables

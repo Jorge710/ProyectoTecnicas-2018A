@@ -11,6 +11,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -45,6 +48,20 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
         }
     }
 
+
+    /*validar correo*/
+    public boolean isEmail(String correo) {
+        Pattern pat = null;
+        Matcher mat = null;
+        pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
+        mat = pat.matcher(correo);
+
+        if (mat.find()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /*limpiar campos*/
     public void limpiarCampos() {
@@ -86,6 +103,7 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
         txtApelCli = new javax.swing.JTextField();
         btnGuardarDatos = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,7 +118,25 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
 
         jLabel7.setText("Activo");
 
+        txtActivoCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtActivoCliKeyTyped(evt);
+            }
+        });
+
+        txtEmailCli.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtEmailCliFocusLost(evt);
+            }
+        });
+
         jLabel1.setText("Cedula Cliente: ");
+
+        txtTlfCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTlfCliKeyTyped(evt);
+            }
+        });
 
         jLabel2.setText("Nombre Cliente: ");
 
@@ -111,6 +147,12 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
         jLabel5.setText("Email Cliente: ");
 
         jLabel6.setText("Telf Cliente");
+
+        txtCedulaCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaCliKeyTyped(evt);
+            }
+        });
 
         btnGuardarDatos.setFont(new java.awt.Font("AR JULIAN", 0, 12)); // NOI18N
         btnGuardarDatos.setText("GUARDAR DATOS");
@@ -207,39 +249,107 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                 .addGap(21, 21, 21))
         );
 
+        jLabel14.setFont(new java.awt.Font("AR JULIAN", 1, 24)); // NOI18N
+        jLabel14.setText("REGISTRAR CLIENTE");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnRegresar1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRegresar1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addComponent(jLabel14)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRegresar1)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(btnRegresar1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosActionPerformed
-        String query = "INSERT INTO `cliente`(`RucCli`, `NomCli`, `ApelCli`, `DirCli`, `TlfCli`, `EmailCli`, `Activo`) VALUES ('" + txtCedulaCli.getText() + "','" + txtNomCli.getText() + "','" + txtApelCli.getText() + "','" + txtDirCli.getText() + "','" + txtTlfCli.getText() + "','" + txtEmailCli.getText() + "','" + txtActivoCli.getText() + "')";
 
-        executeSqlQuery(query, "Inserted");
-        limpiarCampos();
+        try {
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+            //------- generacion de numeros randomicos -------//
+            Random num = new Random();
+            int N = num.nextInt(1000);
+
+            String nom = txtNomCli.getText();
+            String apell = txtApelCli.getText();
+            String ci = txtCedulaCli.getText();
+
+            if (nom.equals("") || apell.equals("") || ci.equals("")) {
+                JOptionPane.showMessageDialog(null, "INGRESE DATOS.", "ERROR!!", JOptionPane.ERROR_MESSAGE);
+
+            } else if (ci.length() == 10) {
+                int coef = 0, mult = 0, sum = 0, verificador = 0;
+                for (int i = 0; i < ci.length() - 1; i++) {
+                    if (i % 2 == 0) {
+                        coef = 2;
+                    } else {
+                        coef = 1;
+                    }
+                    mult = coef * Character.getNumericValue(ci.charAt(i));
+
+                    if (mult > 9) {
+                        mult = mult - 9;
+
+                    }
+
+                    sum += mult;
+                }
+
+                verificador = 10 - (sum % 10);
+
+                if (verificador == Character.getNumericValue(ci.charAt(ci.length() - 1))) {
+                    JOptionPane.showMessageDialog(null, "GUARDANDO USUARIO");
+                    System.out.println("registra");
+                    String query = "INSERT INTO `cliente`(`RucCli`, `NomCli`, `ApelCli`, `DirCli`, `TlfCli`, `EmailCli`, `Activo`) VALUES ('" + txtCedulaCli.getText() + "','" + txtNomCli.getText() + "','" + txtApelCli.getText() + "','" + txtDirCli.getText() + "','" + txtTlfCli.getText() + "','" + txtEmailCli.getText() + "','" + txtActivoCli.getText() + "')";
+
+                    executeSqlQuery(query, "Inserted");
+                    limpiarCampos();
+
+                    FrmMenu mr = new FrmMenu();
+                    mr.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO veri", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO.", "ERROR!!", JOptionPane.WARNING_MESSAGE);// longitud cedula
+            }
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(null, nfe);
+            //nfe.printStackTrace();
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("No ingresaste un numero." + e.getMessage());
+            JOptionPane.showMessageDialog(null, e);
+
+        }
+
+
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
 
     private void btnRegresar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresar1ActionPerformed
@@ -251,6 +361,45 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtEmailCliFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailCliFocusLost
+        if (isEmail(txtEmailCli.getText())) {
+
+        } else {
+            JOptionPane.showMessageDialog(null, "EMAIL INCORRECTO.", "ERROR!!", JOptionPane.ERROR_MESSAGE);
+            txtEmailCli.setText("");
+        }
+    }//GEN-LAST:event_txtEmailCliFocusLost
+
+    private void txtCedulaCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaCliKeyTyped
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "SOLO NUMEROS", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtCedulaCliKeyTyped
+
+    private void txtActivoCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActivoCliKeyTyped
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "SOLO NUMEROS", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtActivoCliKeyTyped
+
+    private void txtTlfCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTlfCliKeyTyped
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "SOLO NUMEROS", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtTlfCliKeyTyped
 
     /**
      * @param args the command line arguments
@@ -292,6 +441,7 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarDatos;
     private javax.swing.JButton btnRegresar1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
