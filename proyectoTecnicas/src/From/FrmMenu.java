@@ -94,6 +94,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/registros.png"))); // NOI18N
         jMenu2.setText("Clientes");
 
         jMenuItem3.setText("Registrar");
@@ -114,6 +115,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/mantenimiento.png"))); // NOI18N
         jMenu12.setText("Orden Trabajo");
 
         jMenuItem13.setText("Orden Trabajo");
@@ -126,6 +128,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu12);
 
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/registros.png"))); // NOI18N
         jMenu3.setText("Proveedores");
 
         jMenuItem5.setText("Registrar");
@@ -146,6 +149,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/registros.png"))); // NOI18N
         jMenu4.setText("Empleado");
 
         jMenuItem7.setText("Registrar");
@@ -166,6 +170,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu4);
 
+        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ciudad.PNG"))); // NOI18N
         jMenu5.setText("Almacen");
 
         jMenuItem8.setText("Registrar Servicio");
@@ -186,6 +191,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu5);
 
+        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconomenufactura.png"))); // NOI18N
         jMenu8.setText("Contabilidad");
 
         jMenuItem12.setText("Facturacion");
@@ -242,9 +248,11 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu8);
 
+        jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconoreporte.png"))); // NOI18N
         jMenu6.setText("Reportes");
         jMenuBar1.add(jMenu6);
 
+        jMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/salir.PNG"))); // NOI18N
         jMenu7.setText("Salir");
 
         jMenuItem10.setText("Log Out");
@@ -263,7 +271,7 @@ public class FrmMenu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lbl_portada, javax.swing.GroupLayout.PREFERRED_SIZE, 639, Short.MAX_VALUE)
+            .addComponent(lbl_portada, javax.swing.GroupLayout.PREFERRED_SIZE, 862, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

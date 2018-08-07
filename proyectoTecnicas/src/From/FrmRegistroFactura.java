@@ -899,12 +899,8 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         
-        FrmMenu venMenu = new FrmMenu();
-        venMenu.setSize(500, 500);
-        venMenu.setResizable(false);
-        venMenu.setDefaultCloseOperation(venMenu.EXIT_ON_CLOSE);
-        venMenu.setLocation(500, 100);
-        venMenu.setVisible(true);
+        FrmMenu menu = new FrmMenu();
+        menu.setVisible(true);
         this.dispose();
         
     }//GEN-LAST:event_btnRegresarActionPerformed
