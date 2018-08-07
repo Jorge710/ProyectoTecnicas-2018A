@@ -10,7 +10,7 @@ package Clase;
  * @author User
  */
 public class ClsProducto {
-    
+
     private int IdProd;
     private String Descripcion;
     private int Cantidad;
@@ -19,8 +19,10 @@ public class ClsProducto {
     private int RucProv;
     private int idProdInterno;
     private double totalMaterial;
-    
-     public ClsProducto(int IdProd, String Descripcion, int Cantidad, double PrecioUnit, int idProdInterno, double totalMaterial) {
+    private String NomProv;
+    private String ApelProv;
+
+    public ClsProducto(int IdProd, String Descripcion, int Cantidad, double PrecioUnit, int idProdInterno, double totalMaterial) {
         this.IdProd = IdProd;
         this.Descripcion = Descripcion;
         this.Cantidad = Cantidad;
@@ -28,7 +30,6 @@ public class ClsProducto {
         this.idProdInterno = idProdInterno;
         this.totalMaterial = totalMaterial;
     }
-    
 
     public ClsProducto(int IdProd, String Descripcion, double PrecioUnit) {
         this.IdProd = IdProd;
@@ -43,17 +44,16 @@ public class ClsProducto {
         this.idProdInterno = idProdInterno;
     }
 
-    public ClsProducto(int IdProd, String Descripcion, int Cantidad, double CostoUnit, double PrecioUnit, int RucProv) {
+    public ClsProducto(int IdProd, String Descripcion, int Cantidad, double CostoUnit, double PrecioUnit, int RucProv, String NomProv, String ApelProv) {
         this.IdProd = IdProd;
         this.Descripcion = Descripcion;
         this.Cantidad = Cantidad;
         this.CostoUnit = CostoUnit;
         this.PrecioUnit = PrecioUnit;
         this.RucProv = RucProv;
+        this.NomProv = NomProv;
+        this.ApelProv = ApelProv;
     }
-
-   
-    
 
     public double getTotalMaterial() {
         return totalMaterial;
@@ -62,8 +62,6 @@ public class ClsProducto {
     public void setTotalMaterial(double totalMaterial) {
         this.totalMaterial = totalMaterial;
     }
-    
-    
 
     public int getIdProdInterno() {
         return idProdInterno;
@@ -72,8 +70,6 @@ public class ClsProducto {
     public void setIdProdInterno(int idProdInterno) {
         this.idProdInterno = idProdInterno;
     }
-    
-    
 
     public int getIdProd() {
         return IdProd;
@@ -125,11 +121,23 @@ public class ClsProducto {
 
     @Override
     public String toString() {
-        return IdProd + " " + Descripcion +" "+ PrecioUnit  + " "+idProdInterno+" "+totalMaterial;
+        return IdProd + " " + Descripcion + " " + PrecioUnit + " " + idProdInterno + " " + totalMaterial;
     }
-    
-    
-    
-    
-    
+
+    public String getNomProv() {
+        return NomProv;
+    }
+
+    public void setNomProv(String NomProv) {
+        this.NomProv = NomProv;
+    }
+
+    public String getApelProv() {
+        return ApelProv;
+    }
+
+    public void setApelProv(String ApelProv) {
+        this.ApelProv = ApelProv;
+    }
+
 }

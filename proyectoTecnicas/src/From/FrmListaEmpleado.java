@@ -34,12 +34,14 @@ public class FrmListaEmpleado extends javax.swing.JFrame {
         txtRucEmpre.setEditable(false);
         mostrarTablaEmpleado();
         conexion_consulta.conectar();
+        
+        txtCedulaEmpl.setEditable(false);
     }
 
     /*Empleado*/
     public ArrayList<ClsEmpleado> getUserList() {
         ArrayList<ClsEmpleado> usersList = new ArrayList<ClsEmpleado>();
-        String query = "SELECT * FROM `empleado`";
+        String query = "SELECT `RucEmpl`,`NomEmpl`,`ApelEmpl`,`DirEmpl`,`TlfEmpl`,`EmailEmpl`,`Activo`,empresa.`RucEmpre`,`NomEmpre` FROM `empleado`,`empresa` WHERE empresa.`RucEmpre` = empleado.`RucEmpre` ";
         Statement st;
         ResultSet rs;
 
@@ -48,7 +50,15 @@ public class FrmListaEmpleado extends javax.swing.JFrame {
             rs = st.executeQuery(query);
             ClsEmpleado clsEmpl;
             while (rs.next()) {
-                clsEmpl = new ClsEmpleado(rs.getInt("RucEmpl"), rs.getString("NomEmpl"), rs.getString("ApelEmpl"), rs.getString("DirEmpl"), rs.getInt("TlfEmpl"), rs.getString("EmailEmpl"), rs.getInt("Activo"), rs.getInt("RucEmpre"));
+                clsEmpl = new ClsEmpleado(rs.getInt("RucEmpl"),
+                        rs.getString("NomEmpl"),
+                        rs.getString("ApelEmpl"),
+                        rs.getString("DirEmpl"),
+                        rs.getInt("TlfEmpl"),
+                        rs.getString("EmailEmpl"),
+                        rs.getInt("Activo"),
+                        rs.getInt("RucEmpre"),
+                        rs.getString("NomEmpre"));
                 usersList.add(clsEmpl);
 
             }
@@ -61,7 +71,7 @@ public class FrmListaEmpleado extends javax.swing.JFrame {
     public void mostrarTablaEmpleado() {
         ArrayList<ClsEmpleado> list = getUserList();
         DefaultTableModel model = (DefaultTableModel) tblEmpleado.getModel();
-        Object[] row = new Object[8];
+        Object[] row = new Object[9];
         for (int i = 0; i < list.size(); i++) {
             row[0] = list.get(i).getRucEmpl();
             row[1] = list.get(i).getNomEmpl();
@@ -71,6 +81,7 @@ public class FrmListaEmpleado extends javax.swing.JFrame {
             row[5] = list.get(i).getEmailEmpl();
             row[6] = list.get(i).getActivo();
             row[7] = list.get(i).getRucEmpre();
+            row[8] = list.get(i).getNomEmpre();
 
             model.addRow(row);
 
@@ -170,7 +181,7 @@ public class FrmListaEmpleado extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Ruc", "Nombre", "Apellido", "Direccion", "Telefono", "Correo", "Activo", "Empresa"
+                "Ruc", "Nombre", "Apellido", "Direccion", "Telefono", "Correo", "Activo", "Ruc Empresa", "Nombre Empresa"
             }
         ));
         tblEmpleado.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -372,20 +383,20 @@ public class FrmListaEmpleado extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane1))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(7, 7, 7)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
-                        .addComponent(jLabel14)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(170, 170, 170)
+                                .addComponent(jLabel14)))
+                        .addGap(0, 420, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,18 +426,30 @@ public class FrmListaEmpleado extends javax.swing.JFrame {
         txtEmailEmpl.setText(model.getValueAt(i, 5).toString());
         txtActivoEmpl.setText(model.getValueAt(i, 6).toString());
         txtRucEmpre.setText(model.getValueAt(i, 7).toString());
+        txtNombre_empresa.setText(model.getValueAt(i, 8).toString());
     }//GEN-LAST:event_tblEmpleadoMouseClicked
 
     private void btnModificarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProvActionPerformed
-        String query = "UPDATE `empleado` SET `RucEmpl`='" + txtCedulaEmpl.getText() + "',`NomEmpl`='" + txtNomEmpl.getText() + "',`ApelEmpl`='" + txtApelEmpl.getText() + "',`DirEmpl`='" + txtDirEmpl.getText() + "',`TlfEmpl`='" + txtTlfEmpl.getText() + "',`EmailEmpl`='" + txtEmailEmpl.getText() + "',`Activo`='" + txtActivoEmpl.getText() + "' WHERE `RucEmpl`='" + txtCedulaEmpl.getText() + "'";
+        if (!txtCedulaEmpl.getText().equals("")) {
+            if (!txtDirEmpl.getText().equals("") && !txtApelEmpl.getText().equals("") && !txtNomEmpl.getText().equals("") && !txtRucEmpre.getText().equals("")) {
+                String query = "UPDATE `empleado` SET `RucEmpl`='" + txtCedulaEmpl.getText() + "',`NomEmpl`='" + txtNomEmpl.getText() + "',`ApelEmpl`='" + txtApelEmpl.getText() + "',`DirEmpl`='" + txtDirEmpl.getText() + "',`TlfEmpl`='" + txtTlfEmpl.getText() + "',`EmailEmpl`='" + txtEmailEmpl.getText() + "',`Activo`='" + txtActivoEmpl.getText() + "',`RucEmpre`='" + txtRucEmpre.getText() + "' WHERE `RucEmpl`='" + txtCedulaEmpl.getText() + "'";
 
-        executeSqlQuery(query, "Updated");
+                executeSqlQuery(query, "Updated");
 
-        limpiarCampos();
+                limpiarCampos();
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+                FrmMenu mr = new FrmMenu();
+                mr.setVisible(true);
+                this.dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL EMPLEADO", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "FALTAN LA CÉDULA DEL EMPLEADO", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_btnModificarProvActionPerformed
 
     private void txtCedulaEmplKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaEmplKeyTyped

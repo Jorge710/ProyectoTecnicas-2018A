@@ -74,6 +74,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
         lbl_portada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/taller.jpg"))); // NOI18N
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/carro.png"))); // NOI18N
         jMenu1.setText("Vehiculo");
 
         jMenuItem1.setText("Registrar");
@@ -275,7 +276,7 @@ public class FrmMenu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lbl_portada, javax.swing.GroupLayout.PREFERRED_SIZE, 281, Short.MAX_VALUE)
+            .addComponent(lbl_portada, javax.swing.GroupLayout.PREFERRED_SIZE, 497, Short.MAX_VALUE)
         );
 
         pack();

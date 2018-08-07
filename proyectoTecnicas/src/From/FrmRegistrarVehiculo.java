@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -50,7 +51,9 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                         rs.getString("Tipo"),
                         rs.getString("Modelo"),
                         rs.getString("Color"),
-                        rs.getInt("RucCli"));
+                        rs.getInt("RucCli"),
+                        rs.getString("NomCli"),
+                        rs.getString("ApelCli"));
                 vehiList.add(clsvehi);
 
             }
@@ -100,7 +103,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
         }
     }
 
-        /*validar correo*/
+    /*validar correo*/
     public boolean isEmail(String correo) {
         Pattern pat = null;
         Matcher mat = null;
@@ -111,6 +114,19 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /*limpiar tabla*/
+    public void limpiarTabla(JTable tabla) {
+        try {
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            int filas = tabla.getRowCount();
+            for (int i = 0; filas > i; i++) {
+                modelo.removeRow(0);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al limpiar la tabla.");
         }
     }
 
@@ -508,13 +524,25 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatosActionPerformed
-        String query = "INSERT INTO `vehiculo` VALUES ('" + txtPlaca.getText() + "','" + txtTipo.getText() + "','" + txtModelo.getText() + "','" + txtColor.getText() + "','" + txtCI_propietario.getText() + "')";
-        executeSqlQueryProducto(query, "Inserted");
-        limpiarCampos();
+        
+        if (!txtCI_propietario.getText().equals("")) {
+            if (!txtColor.getText().equals("") && !txtModelo.getText().equals("") && !txtTipo.getText().equals("")&& !txtPlaca.getText().equals("")) {
+                String query = "INSERT INTO `vehiculo` VALUES ('" + txtPlaca.getText() + "','" + txtTipo.getText() + "','" + txtModelo.getText() + "','" + txtColor.getText() + "','" + txtCI_propietario.getText() + "')";
+                executeSqlQueryProducto(query, "Inserted");
+                limpiarCampos();
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+                FrmMenu mr = new FrmMenu();
+                mr.setVisible(true);
+                this.dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL VEHICULO", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "FALTAN LA CÉDULA DEL CLIENTE", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_btnGuardarDatosActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -534,30 +562,36 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
     }//GEN-LAST:event_tblMouseClicked
 
     private void txtNombCliKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombCliKeyReleased
-        String Nombre = txtNombCli.getText();
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Cédula");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Apellido");
-        modelo.addColumn("Dirección");
-        modelo.addColumn("Telefono");
-        modelo.addColumn("Correo");
-        modelo.addColumn("Activo");
-        ArrayList<Object[]> datos = new ArrayList<Object[]>();
-        datos = conexion_consulta.buscar_cliente_tabla(Nombre);
-        for (int i = 0; i < datos.size(); i++) {
-            modelo.addRow(datos.get(i));
+
+        if (!txtNombCli.getText().equals("")) {
+            String Nombre = txtNombCli.getText();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Cédula");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Apellido");
+            modelo.addColumn("Dirección");
+            modelo.addColumn("Telefono");
+            modelo.addColumn("Correo");
+            modelo.addColumn("Activo");
+            ArrayList<Object[]> datos = new ArrayList<Object[]>();
+            datos = conexion_consulta.buscar_cliente_tabla(Nombre);
+            for (int i = 0; i < datos.size(); i++) {
+                modelo.addRow(datos.get(i));
+            }
+            tbl.setModel(modelo);
+        } else {
+            limpiarTabla(tbl);
         }
-        tbl.setModel(modelo);
+
     }//GEN-LAST:event_txtNombCliKeyReleased
 
     private void btnCrearClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearClienteActionPerformed
-        
+
         jDialog1.setVisible(true);
         jDialog1.setTitle("Registrar cliente");
         jDialog1.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
         jDialog1.setSize(340, 490);//ancho-alto
-        
+
     }//GEN-LAST:event_btnCrearClienteActionPerformed
 
     private void txtActivoCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActivoCliKeyTyped
@@ -640,7 +674,7 @@ public class FrmRegistrarVehiculo extends javax.swing.JFrame {
                     String query = "INSERT INTO `cliente`(`RucCli`, `NomCli`, `ApelCli`, `DirCli`, `TlfCli`, `EmailCli`, `Activo`) VALUES ('" + txtCedulaCli.getText() + "','" + txtNomCli.getText() + "','" + txtApelCli.getText() + "','" + txtDirCli.getText() + "','" + txtTlfCli.getText() + "','" + txtEmailCli.getText() + "','" + txtActivoCli.getText() + "')";
 
                     executeSqlQuery(query, "Inserted");
-                    
+
                 } else {
                     JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO veri", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
                 }

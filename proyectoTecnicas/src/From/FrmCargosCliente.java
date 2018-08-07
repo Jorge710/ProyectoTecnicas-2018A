@@ -5,6 +5,14 @@
  */
 package From;
 
+import Clase.ClsCuentas_x_cobrar;
+import Clase.conectar;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
@@ -17,6 +25,54 @@ public class FrmCargosCliente extends javax.swing.JFrame {
     public FrmCargosCliente() {
         initComponents();
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
+        this.setTitle("Cargo Ciente");
+        mostrarTablaPeliculass();
+    }
+
+    /*pelicula*/
+    public ArrayList<ClsCuentas_x_cobrar> getUserList() {
+        ArrayList<ClsCuentas_x_cobrar> usersList = new ArrayList<ClsCuentas_x_cobrar>();
+        String query = "SELECT `CodCuenta`,`Importe`,cuenta_x_cobrar.`NoFact`,cliente.`RucCli`,cliente.`NomCli`,cliente.`ApelCli`,`fecha_registro` FROM `cuenta_x_cobrar`,`cliente`,`cab_fact` WHERE cuenta_x_cobrar.`NoFact` = cab_fact.`NoFact` AND cliente.`RucCli` = cab_fact.`RucCli`";
+        Statement st;
+        ResultSet rs;
+
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(query);
+            ClsCuentas_x_cobrar clsCta_x_cobrar;
+            while (rs.next()) {
+                clsCta_x_cobrar = new ClsCuentas_x_cobrar(rs.getInt("CodCuenta"),
+                        rs.getInt("Importe"),
+                        rs.getInt("NoFact"),
+                        rs.getInt("RucCli"),
+                        rs.getString("NomCli"),
+                        rs.getString("ApelCli"),
+                        rs.getString("fecha_registro"));
+                usersList.add(clsCta_x_cobrar);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return usersList;
+    }
+
+    public void mostrarTablaPeliculass() {
+        ArrayList<ClsCuentas_x_cobrar> list = getUserList();
+        DefaultTableModel model = (DefaultTableModel) tblCargoCliente.getModel();
+        Object[] row = new Object[7];
+        for (int i = 0; i < list.size(); i++) {
+            row[0] = list.get(i).getCodCuenta();
+            row[1] = list.get(i).getImporte();
+            row[2] = list.get(i).getNoFact();
+            row[3] = list.get(i).getRucCli();
+            row[4] = list.get(i).getNomCli();
+            row[5] = list.get(i).getApelCli();
+            row[6] = list.get(i).getFecha_registro();
+
+            model.addRow(row);
+
+        }
     }
 
     /**
@@ -28,47 +84,58 @@ public class FrmCargosCliente extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnAgregar = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnCancelar = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
         btnRegresar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCargoCliente = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("No. FACTURA");
+        jLabel14.setFont(new java.awt.Font("AR JULIAN", 1, 24)); // NOI18N
+        jLabel14.setText("CARGO CLIENTE");
 
-        jLabel2.setText("FECHA");
+        jToolBar1.setRollover(true);
 
-        jLabel4.setText("CLIENTE");
-
-        jLabel5.setText("IMPORTE");
-
-        jButton1.setText("NUEVO CLIENTE");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/save.png"))); // NOI18N
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnAgregar);
+        jToolBar1.add(jSeparator1);
 
-        jButton3.setText("AGREGAR");
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cancelar.png"))); // NOI18N
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnCancelar);
+        jToolBar1.add(jSeparator2);
 
-        jLabel3.setText("Referencia");
-
-        btnRegresar.setText("REGRESAR");
+        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/refresh.png"))); // NOI18N
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnRegresar);
+
+        tblCargoCliente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo Cargo", "Importe", "No. Factura", "Ruc Cliente", "Nombre Cliente", "Apellido Cliente", "Fecha"
+            }
+        ));
+        jScrollPane1.setViewportView(tblCargoCliente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,71 +145,51 @@ public class FrmCargosCliente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addGap(54, 54, 54)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton3)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnRegresar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField5)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1)))
-                        .addGap(0, 28, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jLabel5)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel14)
+                        .addGap(0, 357, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jButton1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(btnRegresar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        FrmRegistrarCliente rc = new FrmRegistrarCliente();
-        rc.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+
+        /*if (!txtNumeroFactura.getText().equals("") && !txtReferencia.getText().equals("") && !txtFecha.getText().equals("") && !txtCedulaProveedor.getText().equals("") && !txtCedulaEmpresa.getText().equals("")) {
+            if (!txtImporte.getText().equals("")) {
+
+                String query = "INSERT INTO `cuenta_x_pagar` VALUES ('" + txtReferencia.getText() + "','" + txtImporte.getText() + "','" + txtNumeroFactura.getText() + "','" + txtFecha.getText() + "','" + txtCedulaEmpresa.getText() + "','" + txtCedulaProveedor.getText() + "');";
+
+                executeSqlQuery(query, "Inserted");
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(null, "FALTAN EL IMPORTE $$", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL CARGO DE LA FACTURA PROVEEDOR", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }*/
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        //limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         FrmMenu menu = new FrmMenu();
@@ -186,18 +233,18 @@ public class FrmCargosCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JTable tblCargoCliente;
     // End of variables declaration//GEN-END:variables
+
+    conectar cc = new conectar();
+    Connection cn = cc.conexion();
+
 }

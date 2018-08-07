@@ -15,14 +15,19 @@ public class ClsVehiculo {
     private String modelo;
     private String color;
     private int ruccli;
+    private String nombCli;
+    private String apelCli;
 
-    public ClsVehiculo(String placa, String tipo, String modelo, String color, int ruccli) {
+    public ClsVehiculo(String placa, String tipo, String modelo, String color, int ruccli, String nombCli, String apelCli) {
         this.placa = placa;
         this.tipo = tipo;
         this.modelo = modelo;
         this.color = color;
         this.ruccli = ruccli;
+        this.nombCli = nombCli;
+        this.apelCli = apelCli;
     }
+    
 
     public String getPlaca() {
         return placa;
@@ -62,6 +67,22 @@ public class ClsVehiculo {
 
     public void setRuccli(int ruccli) {
         this.ruccli = ruccli;
+    }
+
+    public String getNombCli() {
+        return nombCli;
+    }
+
+    public void setNombCli(String nombCli) {
+        this.nombCli = nombCli;
+    }
+
+    public String getApelCli() {
+        return apelCli;
+    }
+
+    public void setApelCli(String apelCli) {
+        this.apelCli = apelCli;
     }
     
     

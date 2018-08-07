@@ -16,15 +16,21 @@ public class ClsCuentas_x_pagar {
     private int noFactura;
     private String fecha;
     private int empresa;
+    private String NomEmpre;
     private int proveedor;
+    private String NomProv;
+    private String ApelProv;
 
-    public ClsCuentas_x_pagar(int codCuenta, double importe, int noFactura, String fecha, int empresa, int proveedor) {
+    public ClsCuentas_x_pagar(int codCuenta, double importe, int noFactura, String fecha, int empresa, String NomEmpre, int proveedor, String NomProv, String ApelProv) {
         this.codCuenta = codCuenta;
         this.importe = importe;
         this.noFactura = noFactura;
         this.fecha = fecha;
         this.empresa = empresa;
+        this.NomEmpre = NomEmpre;
         this.proveedor = proveedor;
+        this.NomProv = NomProv;
+        this.ApelProv = ApelProv;
     }
 
     public int getCodCuenta() {
@@ -73,6 +79,30 @@ public class ClsCuentas_x_pagar {
 
     public void setProveedor(int proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public String getNomEmpre() {
+        return NomEmpre;
+    }
+
+    public void setNomEmpre(String NomEmpre) {
+        this.NomEmpre = NomEmpre;
+    }
+
+    public String getNomProv() {
+        return NomProv;
+    }
+
+    public void setNomProv(String NomProv) {
+        this.NomProv = NomProv;
+    }
+
+    public String getApelProv() {
+        return ApelProv;
+    }
+
+    public void setApelProv(String ApelProv) {
+        this.ApelProv = ApelProv;
     }
 
 

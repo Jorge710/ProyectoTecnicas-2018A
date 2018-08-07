@@ -47,7 +47,14 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
             rs = st.executeQuery(query);
             ClsEmpleado clsEmpl;
             while (rs.next()) {
-                clsEmpl = new ClsEmpleado(rs.getInt("RucEmpl"), rs.getString("NomEmpl"), rs.getString("ApelEmpl"), rs.getString("DirEmpl"), rs.getInt("TlfEmpl"), rs.getString("EmailEmpl"), rs.getInt("Activo"), rs.getInt("RucEmpre"));
+                clsEmpl = new ClsEmpleado(rs.getInt("RucEmpl"),
+                        rs.getString("NomEmpl"),
+                        rs.getString("ApelEmpl"),
+                        rs.getString("DirEmpl"),
+                        rs.getInt("TlfEmpl"),
+                        rs.getString("EmailEmpl"),
+                        rs.getInt("Activo"),
+                        rs.getInt("RucEmpre"));
                 usersList.add(clsEmpl);
 
             }

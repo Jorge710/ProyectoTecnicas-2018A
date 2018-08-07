@@ -263,14 +263,20 @@ public class FrmServicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String query = "INSERT INTO `servicio` VALUES (NULL,'" + txtDescripcion.getText() + "','" + txtPrecio.getText() + "')";
 
-        executeSqlQuery(query, "Inserted");
-        limpiarCampos();
+        if (!txtDescripcion.getText().equals("") && !txtPrecio.getText().equals("")) {
+            String query = "INSERT INTO `servicio` VALUES (NULL,'" + txtDescripcion.getText() + "','" + txtPrecio.getText() + "')";
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+            executeSqlQuery(query, "Inserted");
+            limpiarCampos();
+
+            FrmMenu mr = new FrmMenu();
+            mr.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL SERVICIO", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -280,13 +286,18 @@ public class FrmServicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        String query = "UPDATE `servicio` SET `Descripcion`='" + txtDescripcion.getText() + "',`PrecioServ`='" + txtPrecio.getText() + "' WHERE `IdServ`='" + txtIdServ.getText() + "'";
-        executeSqlQuery(query, "Updated");
-        limpiarCampos();
+        if (!txtDescripcion.getText().equals("") && !txtPrecio.getText().equals("")) {
+            String query = "UPDATE `servicio` SET `Descripcion`='" + txtDescripcion.getText() + "',`PrecioServ`='" + txtPrecio.getText() + "' WHERE `IdServ`='" + txtIdServ.getText() + "'";
+            executeSqlQuery(query, "Updated");
+            limpiarCampos();
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+            FrmMenu mr = new FrmMenu();
+            mr.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL SERVICIO", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+
 
     }//GEN-LAST:event_btnModificarActionPerformed
 

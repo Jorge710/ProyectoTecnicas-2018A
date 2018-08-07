@@ -91,7 +91,7 @@ public class FrmListaProveedor extends javax.swing.JFrame {
         }
     }
 
-            /*validar correo*/
+    /*validar correo*/
     public boolean isEmail(String correo) {
         Pattern pat = null;
         Matcher mat = null;
@@ -104,7 +104,7 @@ public class FrmListaProveedor extends javax.swing.JFrame {
             return false;
         }
     }
-    
+
     /*limpiar campos*/
     public void limpiarCampos() {
 
@@ -310,21 +310,20 @@ public class FrmListaProveedor extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel14)
-                .addGap(198, 198, 198))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 709, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(366, Short.MAX_VALUE))))
+                        .addGap(0, 678, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(347, 347, 347)
+                .addComponent(jLabel14)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,15 +355,26 @@ public class FrmListaProveedor extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaProveedorMouseClicked
 
     private void btnModificarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProvActionPerformed
-        String query = "UPDATE `proveedor` SET `RucProv`='" + txtCedulaProv.getText() + "',`NomProv`='" + txtNomProv.getText() + "',`ApelProv`='" + txtApelProv.getText() + "',`DirProv`='" + txtDirProv.getText() + "',`TlfProv`='" + txtTlfProv.getText() + "',`emailProv`='" + txtEmailProv.getText() + "',`Activo`='" + txtActivoProv.getText() + "' WHERE `RucProv`='" + txtCedulaProv.getText() + "'";
+        if (!txtCedulaProv.getText().equals("")) {
+            if (!txtDirProv.getText().equals("") && !txtApelProv.getText().equals("") && !txtNomProv.getText().equals("")) {
+                String query = "UPDATE `proveedor` SET `RucProv`='" + txtCedulaProv.getText() + "',`NomProv`='" + txtNomProv.getText() + "',`ApelProv`='" + txtApelProv.getText() + "',`DirProv`='" + txtDirProv.getText() + "',`TlfProv`='" + txtTlfProv.getText() + "',`emailProv`='" + txtEmailProv.getText() + "',`Activo`='" + txtActivoProv.getText() + "' WHERE `RucProv`='" + txtCedulaProv.getText() + "'";
 
-        executeSqlQuery(query, "Updated");
+                executeSqlQuery(query, "Updated");
 
-        limpiarCampos();
+                limpiarCampos();
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+                FrmMenu mr = new FrmMenu();
+                mr.setVisible(true);
+                this.dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL PROVEEDOR", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "FALTAN LA CÉDULA DEL PROVEEDOR", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_btnModificarProvActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed

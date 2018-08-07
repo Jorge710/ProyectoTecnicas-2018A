@@ -61,7 +61,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="AR JULIAN" size="24" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="CARGO PROVEEDOR"/>
+        <Property name="text" type="java.lang.String" value="ABONO PROVEEDOR"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JToolBar" name="jToolBar1">
@@ -250,7 +250,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Proveedor"/>
+            <Property name="text" type="java.lang.String" value="Ruc Proveedor:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">

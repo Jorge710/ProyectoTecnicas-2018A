@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -33,7 +34,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
         this.setTitle("Registrar Producto");
         mostrarProductosTabla();
-        
+
         conexion_consulta.conectar();
         txtIdProd.setEditable(false);
         txtRucProveedor_Prod.setEditable(false);
@@ -43,7 +44,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
     /*Producto*/
     public ArrayList<ClsProducto> getProductoList() {
         ArrayList<ClsProducto> prodList = new ArrayList<ClsProducto>();
-        String query = "SELECT * FROM `producto`";
+        String query = "SELECT `IdProd`,`Descripcion`,`Cantidad`,`CostoUnit`,`PrecioUnit`,producto.`RucProv`,`NomProv`,`ApelProv` FROM `producto`,`proveedor` WHERE producto.`RucProv` = proveedor.`RucProv`";
         Statement st;
         ResultSet rs;
 
@@ -52,7 +53,14 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
             rs = st.executeQuery(query);
             ClsProducto clsprod;
             while (rs.next()) {
-                clsprod = new ClsProducto(rs.getInt("IdProd"), rs.getString("Descripcion"), rs.getInt("Cantidad"), rs.getDouble("CostoUnit"), rs.getDouble("PrecioUnit"), rs.getInt("RucProv"));
+                clsprod = new ClsProducto(rs.getInt("IdProd"),
+                        rs.getString("Descripcion"),
+                        rs.getInt("Cantidad"),
+                        rs.getDouble("CostoUnit"),
+                        rs.getDouble("PrecioUnit"),
+                        rs.getInt("RucProv"),
+                        rs.getString("NomProv"),
+                        rs.getString("ApelProv"));
                 prodList.add(clsprod);
 
             }
@@ -65,7 +73,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
     public void mostrarProductosTabla() {
         ArrayList<ClsProducto> list = getProductoList();
         DefaultTableModel model = (DefaultTableModel) tblProductos.getModel();
-        Object[] row = new Object[6];
+        Object[] row = new Object[8];
         for (int i = 0; i < list.size(); i++) {
             row[0] = list.get(i).getIdProd();
             row[1] = list.get(i).getDescripcion();
@@ -73,6 +81,8 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
             row[3] = list.get(i).getCostoUnit();
             row[4] = list.get(i).getPrecioUnit();
             row[5] = list.get(i).getRucProv();
+            row[6] = list.get(i).getNomProv();
+            row[7] = list.get(i).getApelProv();
 
             model.addRow(row);
 
@@ -98,6 +108,19 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
         }
     }
 
+    /*limpiar tabla*/
+    public void limpiarTabla(JTable tabla) {
+        try {
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            int filas = tabla.getRowCount();
+            for (int i = 0; filas > i; i++) {
+                modelo.removeRow(0);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al limpiar la tabla.");
+        }
+    }
+
     /*limpiar campos*/
     public void limpiarCampos() {
 
@@ -108,6 +131,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
         txtCostoUnitProd.setText(null);
         txtPrecioUnitProd.setText(null);
         txtNombProv_prod.setText(null);
+        txtRucProveedor_Prod.setText(null);
     }
 
     /**
@@ -264,7 +288,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Descripción", "Cantidad", "Costo Unit", "Precio Unit", "Ruc Proveedor"
+                "Id", "Descripción", "Cantidad", "Costo Unit", "Precio Unit", "Ruc Proveedor", "Nombre Proveedor", "Apellido Proveedor"
             }
         ));
         tblProductos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -341,19 +365,20 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(200, 200, 200)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 370, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2))))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -376,26 +401,48 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
 
     private void btnModificar_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificar_productoActionPerformed
 
-        String query = "UPDATE `producto` SET `IdProd`='" + txtIdProd.getText() + "',`Descripcion`='" + txtDescripcionProd.getText() + "',`Cantidad`='" + txtCantidadPod.getText() + "',`CostoUnit`='" + txtCostoUnitProd.getText() + "',`PrecioUnit`='" + txtPrecioUnitProd.getText() + "',`RucProv`='" + txtRucProveedor_Prod.getText() + "' WHERE `IdProd`='" + txtIdProd.getText() + "'";
-        executeSqlQueryProducto(query, "Updated");
+        if (!txtRucProveedor_Prod.getText().equals("")) {
 
-        limpiarCampos();
+            if (!txtCantidadPod.getText().equals("") && !txtCostoUnitProd.getText().equals("") && !txtDescripcionProd.getText().equals("") && !txtPrecioUnitProd.getText().equals("")) {
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+                String query = "UPDATE `producto` SET `IdProd`='" + txtIdProd.getText() + "',`Descripcion`='" + txtDescripcionProd.getText() + "',`Cantidad`='" + txtCantidadPod.getText() + "',`CostoUnit`='" + txtCostoUnitProd.getText() + "',`PrecioUnit`='" + txtPrecioUnitProd.getText() + "',`RucProv`='" + txtRucProveedor_Prod.getText() + "' WHERE `IdProd`='" + txtIdProd.getText() + "'";
+                executeSqlQueryProducto(query, "Updated");
+
+                limpiarCampos();
+
+                FrmMenu mr = new FrmMenu();
+                mr.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL PRODUCTO", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "INGRESE LA CÉDULA DEL PROVEEDOR", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_btnModificar_productoActionPerformed
 
     private void btnGuardarDatos_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDatos_productoActionPerformed
 
-        String query = "INSERT INTO `producto` VALUES (NULL, '" + txtDescripcionProd.getText() + "', '" + txtCantidadPod.getText() + "', '" + txtCostoUnitProd.getText() + "', '" + txtPrecioUnitProd.getText() + "', '" + txtRucProveedor_Prod.getText() + "');";
-        executeSqlQueryProducto(query, "Inserted");
+        if (!txtRucProveedor_Prod.getText().equals("")) {
 
-        limpiarCampos();
+            if (!txtCantidadPod.getText().equals("") && !txtCostoUnitProd.getText().equals("") && !txtDescripcionProd.getText().equals("") && !txtPrecioUnitProd.getText().equals("")) {
 
-        FrmMenu mr = new FrmMenu();
-        mr.setVisible(true);
-        this.dispose();
+                String query = "INSERT INTO `producto` VALUES (NULL, '" + txtDescripcionProd.getText() + "', '" + txtCantidadPod.getText() + "', '" + txtCostoUnitProd.getText() + "', '" + txtPrecioUnitProd.getText() + "', '" + txtRucProveedor_Prod.getText() + "');";
+                executeSqlQueryProducto(query, "Inserted");
+
+                limpiarCampos();
+
+                FrmMenu mr = new FrmMenu();
+                mr.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "FALTAN DATOS DEL PRODUCTO", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "INGRESE LA CÉDULA DEL PROVEEDOR", "ERROR!!", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnGuardarDatos_productoActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -416,7 +463,7 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
         txtCantidadPod.setText(model.getValueAt(i, 2).toString());
         txtCostoUnitProd.setText(model.getValueAt(i, 3).toString());
         txtPrecioUnitProd.setText(model.getValueAt(i, 4).toString());
-        txtNombProv_prod.setText(model.getValueAt(i, 5).toString());
+        txtRucProveedor_Prod.setText(model.getValueAt(i, 5).toString());
     }//GEN-LAST:event_tblProductosMouseClicked
 
     private void txtCantidadPodKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadPodKeyTyped
@@ -450,21 +497,27 @@ public class FrmRegistrarProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPrecioUnitProdKeyTyped
 
     private void txtNombProv_prodKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombProv_prodKeyReleased
-        String Nombre = txtNombProv_prod.getText();
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Cédula");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Apellido");
-        modelo.addColumn("Dirección");
-        modelo.addColumn("Telefono");
-        modelo.addColumn("Correo");
-        modelo.addColumn("Activo");
-        ArrayList<Object[]> datos = new ArrayList<Object[]>();
-        datos = conexion_consulta.buscar_caracter_tabla(Nombre);
-        for (int i = 0; i < datos.size(); i++) {
-            modelo.addRow(datos.get(i));
+
+        if (!txtNombProv_prod.getText().equals("")) {
+            String Nombre = txtNombProv_prod.getText();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Cédula");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Apellido");
+            modelo.addColumn("Dirección");
+            modelo.addColumn("Telefono");
+            modelo.addColumn("Correo");
+            modelo.addColumn("Activo");
+            ArrayList<Object[]> datos = new ArrayList<Object[]>();
+            datos = conexion_consulta.buscar_caracter_tabla(Nombre);
+            for (int i = 0; i < datos.size(); i++) {
+                modelo.addRow(datos.get(i));
+            }
+            tblProveedor_Prod.setModel(modelo);
+        } else {
+            limpiarTabla(tblProveedor_Prod);
         }
-        tblProveedor_Prod.setModel(modelo);
+
 
     }//GEN-LAST:event_txtNombProv_prodKeyReleased
 

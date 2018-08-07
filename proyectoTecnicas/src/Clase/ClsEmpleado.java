@@ -19,6 +19,7 @@ public class ClsEmpleado {
     private String EmailEmpl;
     private int Activo;
     private int RucEmpre;
+    private String NomEmpre;
 
     public ClsEmpleado(int RucEmpl, String NomEmpl, String ApelEmpl, String DirEmpl, int TlfEmpl, String EmailEmpl, int Activo, int RucEmpre) {
         this.RucEmpl = RucEmpl;
@@ -31,6 +32,22 @@ public class ClsEmpleado {
         this.RucEmpre = RucEmpre;
     }
 
+    
+    public ClsEmpleado(int RucEmpl, String NomEmpl, String ApelEmpl, String DirEmpl, int TlfEmpl, String EmailEmpl, int Activo, int RucEmpre, String NomEmpre) {
+        this.RucEmpl = RucEmpl;
+        this.NomEmpl = NomEmpl;
+        this.ApelEmpl = ApelEmpl;
+        this.DirEmpl = DirEmpl;
+        this.TlfEmpl = TlfEmpl;
+        this.EmailEmpl = EmailEmpl;
+        this.Activo = Activo;
+        this.RucEmpre = RucEmpre;
+        this.NomEmpre = NomEmpre;
+    }
+
+
+
+    
     public int getRucEmpl() {
         return RucEmpl;
     }
@@ -93,6 +110,14 @@ public class ClsEmpleado {
 
     public void setRucEmpre(int RucEmpre) {
         this.RucEmpre = RucEmpre;
+    }
+
+    public String getNomEmpre() {
+        return NomEmpre;
+    }
+
+    public void setNomEmpre(String NomEmpre) {
+        this.NomEmpre = NomEmpre;
     }
     
     

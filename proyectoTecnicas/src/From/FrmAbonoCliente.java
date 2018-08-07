@@ -5,6 +5,15 @@
  */
 package From;
 
+import Clase.conectar;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Usuario
@@ -16,6 +25,54 @@ public class FrmAbonoCliente extends javax.swing.JFrame {
      */
     public FrmAbonoCliente() {
         initComponents();
+        this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
+        this.setTitle("Abono Ciente");
+        llenarComboCuentas_x_p_abono();
+    }
+
+        /*llenar combox Empleado */
+    public void llenarComboCuentas_x_p_abono() {
+        Statement st;
+        ResultSet rs;
+
+        try {
+            String cap = "";
+            st = cn.createStatement();
+            rs = st.executeQuery("SELECT * FROM `cuenta_x_cobrar`");
+            while (rs.next()) {
+                this.cmbNumFactura.addItem(rs.getString("NoFact"));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    
+    public void executeSqlQuery(String query, String message) {
+        Statement st;
+        try {
+            st = cn.createStatement();
+            if (st.executeUpdate(query) == 1) {
+                /*
+                DefaultTableModel model = (DefaultTableModel) tablaProveedor.getModel();
+                model.setRowCount(0);
+                mostrarProveedoresTabla();
+                 */
+                JOptionPane.showMessageDialog(null, "Data" + message + "Succefully");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data Not" + message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String fechaActual() {
+        Date fecha = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
+
+        return formatoFecha.format(fecha);
     }
 
     /**
@@ -27,21 +84,276 @@ public class FrmAbonoCliente extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jToolBar1 = new javax.swing.JToolBar();
+        btnAgregar = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnCancelar = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        btnRegresar = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cmbNumFactura = new javax.swing.JComboBox<>();
+        txtSaldo = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtImporte = new javax.swing.JTextField();
+        txtProveedor = new javax.swing.JTextField();
+        txtFecha = new javax.swing.JTextField();
+        txtReferencia = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtNomb_Cliente = new javax.swing.JTextField();
+        txtApel_cliente = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jToolBar1.setRollover(true);
+
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/save.png"))); // NOI18N
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAgregar);
+        jToolBar1.add(jSeparator1);
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cancelar.png"))); // NOI18N
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnCancelar);
+        jToolBar1.add(jSeparator2);
+
+        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/refresh.png"))); // NOI18N
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnRegresar);
+
+        jLabel14.setFont(new java.awt.Font("AR JULIAN", 1, 24)); // NOI18N
+        jLabel14.setText("ABONO CLIENTE");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel1.setText("No. Factura");
+
+        cmbNumFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNumFacturaActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Saldo");
+
+        jLabel3.setText("Referencia");
+
+        jLabel4.setText("Fecha");
+
+        jLabel5.setText("Ruc Cliente:");
+
+        jLabel6.setText("Importe");
+
+        jLabel7.setText("Nombre Cliente:");
+
+        jLabel8.setText("Apellido Cliente:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel4))
+                        .addGap(61, 61, 61)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtApel_cliente)
+                                .addComponent(txtProveedor, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtReferencia)
+                                .addComponent(txtSaldo)
+                                .addComponent(txtImporte, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(cmbNumFactura, javax.swing.GroupLayout.Alignment.TRAILING, 0, 160, Short.MAX_VALUE)
+                                .addComponent(txtNomb_Cliente, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cmbNumFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNomb_Cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtApel_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(jLabel14)))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addGap(18, 18, 18)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+
+        double saldo = Double.parseDouble(txtSaldo.getText());
+        double importe = Double.parseDouble(txtImporte.getText());
+        double saldoRestante = Double.parseDouble(txtSaldo.getText());
+
+        if (saldo == 0) {
+            JOptionPane.showMessageDialog(null, "La cuenta Seleccionada esta SALDADA!!!  =) ");
+            txtFecha.setText("");
+            txtImporte.setText("");
+            txtProveedor.setText("");
+            txtReferencia.setText("");
+            txtSaldo.setText("");
+        } else {
+            try {
+                if (!txtImporte.getText().equals("") && importe <= saldo) {
+
+                    saldoRestante = saldo - importe;
+
+                    String query = "UPDATE `cuenta_x_cobrar` SET `Importe`='" + saldoRestante + "' WHERE `CodCuenta`='" + txtReferencia.getText() + "'";
+
+                    executeSqlQuery(query, "Updated");
+
+                    FrmMenu menu = new FrmMenu();
+                    menu.setVisible(true);
+                    this.dispose();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error Ingrese el importe igual o mayor al saldo", "Error!! =(", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        //limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        FrmMenu menu = new FrmMenu();
+        menu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void cmbNumFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNumFacturaActionPerformed
+
+        String i = (String) cmbNumFactura.getSelectedItem().toString();
+
+        txtFecha.setText(fechaActual());
+        try {
+            String sql = "SELECT `CodCuenta`, `Importe`, cuenta_x_cobrar.`NoFact`, cliente.`RucCli`, cliente.`NomCli`, cliente.`ApelCli` FROM `cuenta_x_cobrar`,`cliente`,`cab_fact` WHERE cuenta_x_cobrar.NoFact = '" + i + "' AND cuenta_x_cobrar.NoFact = cab_fact.NoFact AND cliente.`RucCli` = cab_fact.`RucCli`";
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            String datos[] = new String[6];
+
+            while (rs.next()) {
+                datos[0] = rs.getString(1);//CodCuenta
+                datos[1] = rs.getString(2);//Importe es el saldo
+                datos[2] = rs.getString(3);//NoFact
+                datos[3] = rs.getString(4);//RucCli
+                datos[4] = rs.getString(5);//NomCli
+                datos[5] = rs.getString(6);//ApelCLi
+            }
+
+            if (datos[0] != null) {
+
+                // lleno los datos de las cuentas por pagar
+                txtSaldo.setText(datos[1]);
+                txtReferencia.setText(datos[0]);
+                txtProveedor.setText(datos[3]);
+                txtNomb_Cliente.setText(datos[4]);
+                txtApel_cliente.setText(datos[5]);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "!! Factura NO REGISTRADO   !!");
+
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR");
+        }
+    }//GEN-LAST:event_cmbNumFacturaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +391,32 @@ public class FrmAbonoCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> cmbNumFactura;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JTextField txtApel_cliente;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtImporte;
+    private javax.swing.JTextField txtNomb_Cliente;
+    private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtReferencia;
+    private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
+
+    conectar cc = new conectar();
+    Connection cn = cc.conexion();
 }

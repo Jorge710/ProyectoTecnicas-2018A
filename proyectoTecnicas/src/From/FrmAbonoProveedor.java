@@ -130,7 +130,7 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel14.setFont(new java.awt.Font("AR JULIAN", 1, 24)); // NOI18N
-        jLabel14.setText("CARGO PROVEEDOR");
+        jLabel14.setText("ABONO PROVEEDOR");
 
         jToolBar1.setRollover(true);
 
@@ -176,7 +176,7 @@ public class FrmAbonoProveedor extends javax.swing.JFrame {
 
         jLabel4.setText("Fecha");
 
-        jLabel5.setText("Proveedor");
+        jLabel5.setText("Ruc Proveedor:");
 
         jLabel6.setText("Importe");
 
