@@ -163,7 +163,7 @@ CREATE TABLE cab_fact
 
  
 CREATE TABLE cuenta_x_cobrar
-(CodCuenta INT NOT NULL,
+(CodCuenta INT UNIQUE AUTO_INCREMENT NOT NULL,
  Importe DECIMAL (10,2) NOT NULL,
  NoFact INT NOT NULL,
  fecha_registro DATE NOT NULL,

@@ -324,7 +324,7 @@ public class FrmRegistrarCliente extends javax.swing.JFrame {
                     mr.setVisible(true);
                     this.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO veri", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
+                    JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO.", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
                 }
 
             } else {

@@ -18,44 +18,55 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
-
-
 public class FrmRegistroFactura extends javax.swing.JFrame {
-    
+
     public static String FechaFact = "";
     public static DefaultTableModel modelo;
 
-    
     public static int numFact = 0;
-    
+
     double subTotal = 0.00;
     double iva = 0.00;
     double total = 0.00;
-    
 
-   
     public FrmRegistroFactura() {
-       initComponents();
-       numeroFactura();
-       cargarComboDatosCLiente();
-       inicializarCampos();
-       obtenerFecha();
-       numeroFactura();
-        
+        initComponents();
+        this.setLocationRelativeTo(null);// Iniciamos la pantalla al centro
+        this.setTitle("Registrar Factura");
+        numeroFactura();
+        cargarComboDatosCLiente();
+        inicializarCampos();
+        obtenerFecha();
+        numeroFactura();
+
     }
-    
-   public void inicializarCampos(){
-       
-       txtCedCli.setEditable(true);
-       txtNomCli.setEditable(false);
+
+    public void executeSqlQuery(String query, String message) {
+        Statement st;
+        try {
+            st = cn.createStatement();
+            if (st.executeUpdate(query) == 1) {
+
+                JOptionPane.showMessageDialog(null, "CARGO CLIENTE " + message + "EXITOSAMENTE CARGADO");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data Not" + message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void inicializarCampos() {
+
+        txtCedCli.setEditable(true);
+        txtNomCli.setEditable(false);
         txtApelCLi.setEditable(false);
         txtDirCli.setEditable(false);
         txtEmailCli.setEditable(false);
         txtTlfCli.setEditable(false);
         txtFechaFact.setEditable(false);
         txtNumeroFactura.setEditable(false);
-        
+
         txtCedCli.setText("");
         txtNomCli.setText("");
         txtApelCLi.setText("");
@@ -64,58 +75,51 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         txtTlfCli.setText("");
         txtFechaFact.setText("");
         txtNumeroFactura.setText("");
-        
+
         txtSubtotalFact.setText("");
         txtIVAFact.setText("");
         txtTotalFact.setText("");
 
         txtFechaFact.setEditable(false);
         txtNumeroFactura.setEditable(false);
-        
-       
+
         btnGuardarFactura.setEnabled(false);
         btnLimpiarDatos.setEnabled(false);
-       
+
         btnRegresar.setEnabled(true);
-        
+
         txtSubtotalFact.setEditable(false);
         txtIVAFact.setEditable(false);
         txtTotalFact.setEditable(false);
-        
-        
+
         cmbDatosClien.setSelectedIndex(-1);
-        
+
         cmbOrdenTrabajo.setEnabled(false);
         cmbOrdenTrabajo.setSelectedIndex(-1);
-        
-        
-   }
-   
-   public void LimpiarCampos(){
-       
-       txtCedCli.setText("");
-       txtNomCli.setText("");
-       txtApelCLi.setText("");
-       txtDirCli.setText("");
-       txtEmailCli.setText("");
-       txtTlfCli.setText("");
-       txtFechaFact.setText("");
-       txtNumeroFactura.setText("");
-        
+
+    }
+
+    public void LimpiarCampos() {
+
+        txtCedCli.setText("");
+        txtNomCli.setText("");
+        txtApelCLi.setText("");
+        txtDirCli.setText("");
+        txtEmailCli.setText("");
+        txtTlfCli.setText("");
+        txtFechaFact.setText("");
+        txtNumeroFactura.setText("");
+
         txtSubtotalFact.setText("");
         txtIVAFact.setText("");
         txtTotalFact.setText("");
-        
-       
-        
-   }
 
-    public void mostrarDatos(String valor){
-        
-       
+    }
+
+    public void mostrarDatos(String valor) {
+
         try {
-            
-            
+
             String sql = "SELECT * FROM CLIENTE WHERE RUCCLI = '" + valor + "'";
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -130,13 +134,12 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 datos[4] = rs.getString(5);
                 datos[5] = rs.getString(6);
                 datos[6] = rs.getString(7);
-                
+
             }
-            
-            if(datos[0] != null ){
-                
+
+            if (datos[0] != null) {
+
                 // lleno los datos del cliente en los combobox correspondientes
-                
                 txtNomCli.setText(datos[1]);
                 txtApelCLi.setText(datos[2]);
                 txtDirCli.setText(datos[3]);
@@ -144,60 +147,59 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 txtTlfCli.setText(datos[4]);
 
                 // activo los campos de fecha y numero de factura 
-                
                 txtFechaFact.setEditable(true);
                 txtNumeroFactura.setEditable(true);
                 txtCedCli.setEditable(false);
-                
+
                 btnBuscarCli.setEnabled(false);
                 btnLimpiarDatos.setEnabled(true);
-               
+
                 cmbOrdenTrabajo.setEnabled(true);
                 cmbOrdenTrabajo.setSelectedIndex(-1);
                 //cargarDatosComboOrdenTrabajo();
-      
-            }else{
+
+            } else {
                 JOptionPane.showMessageDialog(null, "!!    CLIENTE NO REGISTRADO   !!");
                 inicializarCampos();
                 txtCedCli.setText("");
             }
-            
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "ERROR "+ ex);
+            JOptionPane.showMessageDialog(null, "ERROR " + ex);
         }
-        
+
     }
-    
-     public void mostrarDetalleFacturaTabla(String idOrden){
-         double subTotal = 0.00;
-         
-        modelo = new DefaultTableModel(){
+
+    public void mostrarDetalleFacturaTabla(String idOrden) {
+        double subTotal = 0.00;
+
+        modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; //declarar que las filas y columnas no sean editable
             }
-            
+
         };
-        
+
         modelo.addColumn("CANTIDAD ");
         modelo.addColumn("DETALLE PRODUCTO O SERVICIO ");
-        modelo.addColumn("PRECIO UNITARIO");   
+        modelo.addColumn("PRECIO UNITARIO");
         modelo.addColumn("TOTAL");
         tblFactura.setModel(modelo);
-        
-         try {
-             String sql = "SELECT ser.Descripcion, ser.PrecioServ,Otros,Subtotal,Iva,Total FROM orden_trabajo ord, det_ordenservicio dor, servicio ser\n"
-                     + "where ord.IdOrden = dor.IdOrden and ser.IdServ = dor.IdServ and ord.IdOrden = '" + idOrden + "'";
-             
-             Statement st = cn.createStatement();
-             ResultSet rs = st.executeQuery(sql);
-             
+
+        try {
+            String sql = "SELECT ser.Descripcion, ser.PrecioServ,Otros,Subtotal,Iva,Total FROM orden_trabajo ord, det_ordenservicio dor, servicio ser\n"
+                    + "where ord.IdOrden = dor.IdOrden and ser.IdServ = dor.IdServ and ord.IdOrden = '" + idOrden + "'";
+
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
             String datos[] = new String[4];
             String datosProd[] = new String[4];
             String valores[] = new String[4];
 
             while (rs.next()) {
-                
+
                 datos[0] = "1";
                 datos[1] = rs.getString(1);
                 datos[2] = rs.getString(2);
@@ -207,47 +209,43 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 valores[2] = rs.getString(5);
                 valores[3] = rs.getString(6);
                 modelo.addRow(datos);
-               
+
             }
-            
-            String sql2 = "SELECT prod.Cantidad,prod.Descripcion, prod.PrecioUnit FROM orden_trabajo ord, det_ordenproducto dop, producto prod\n" +
-                            " where ord.IdOrden = dop.IdOrden and prod.IdProd = dop.IdProd and ord.IdOrden ='"+idOrden+"'";
-             Statement st2 = cn.createStatement();
-             ResultSet rs2 = st.executeQuery(sql2);
-             System.out.println("MAMA");
-             while (rs2.next()) {
-                
+
+            String sql2 = "SELECT prod.Cantidad,prod.Descripcion, prod.PrecioUnit FROM orden_trabajo ord, det_ordenproducto dop, producto prod\n"
+                    + " where ord.IdOrden = dop.IdOrden and prod.IdProd = dop.IdProd and ord.IdOrden ='" + idOrden + "'";
+            Statement st2 = cn.createStatement();
+            ResultSet rs2 = st.executeQuery(sql2);
+            System.out.println("MAMA");
+            while (rs2.next()) {
+
                 datosProd[0] = rs2.getString(1);
                 datosProd[1] = rs2.getString(2);
                 datosProd[2] = rs2.getString(3);
-                datosProd[3] = String.valueOf((Double.parseDouble(rs2.getString(3))*Double.parseDouble(rs2.getString(1))));
+                datosProd[3] = String.valueOf((Double.parseDouble(rs2.getString(3)) * Double.parseDouble(rs2.getString(1))));
                 modelo.addRow(datosProd);
             }
-             
-             
-             
-         } catch (Exception e) {
-             System.out.println("EROROR"+e);
-         }
 
-  
+        } catch (Exception e) {
+            System.out.println("EROROR" + e);
+        }
+
     }
-     
-     public void crearFactura(){
-        try{
-            
+
+    public void crearFactura() {
+        try {
+
             String numFact = txtNumeroFactura.getText();
             String fechaFact = txtFechaFact.getText();
             String cedCli = txtCedCli.getText();
-        
-        PreparedStatement pst = cn.prepareStatement("INSERT INTO CAB_FACT (NUMFACT,CEDCLI,FECHAVENTA) VALUES (?,?,?)");
 
-            
-                pst.setString(1,numFact);
-                pst.setString(2, cedCli);
-                pst.setString(3, fechaFact);
-                System.out.println("FACTURA CREADA");
-                
+            PreparedStatement pst = cn.prepareStatement("INSERT INTO CAB_FACT (NUMFACT,CEDCLI,FECHAVENTA) VALUES (?,?,?)");
+
+            pst.setString(1, numFact);
+            pst.setString(2, cedCli);
+            pst.setString(3, fechaFact);
+            System.out.println("FACTURA CREADA");
+
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(null, " !! ERROR EN EL INGRESO DE DATOS DE LA FACTURA !! ");
@@ -255,15 +253,13 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         }
 
     }
-     
-    
-    
-    public void cargarDatosComboOrdenTrabajo(int ced){
-        
+
+    public void cargarDatosComboOrdenTrabajo(int ced) {
+
         String numCed = String.valueOf(ced);
-        
+
         try {
-            
+
             String sql = "SELECT IDORDEN FROM ORDEN_TRABAJO WHERE RUCCLI = '" + numCed + "'  AND `facturado` = 'NO'";
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -274,113 +270,109 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 datos[0] = rs.getString(1);
                 cmbOrdenTrabajo.addItem(datos[0]);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(FrmRegistroFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void cargarComboDatosCLiente(){
-           String[] datosCliente = new String[3];
+
+    public void cargarComboDatosCLiente() {
+        String[] datosCliente = new String[3];
 
         try {
             Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT DISTINCT ord.RucCli,NomCli,ApelCli FROM orden_trabajo ord, cliente cli\n" +
-            "where ord.RucCli = cli.RucCli");
+            ResultSet rs = st.executeQuery("SELECT DISTINCT ord.RucCli,NomCli,ApelCli FROM orden_trabajo ord, cliente cli\n"
+                    + "where ord.RucCli = cli.RucCli");
 
             while (rs.next()) {
                 datosCliente[0] = rs.getString(1);
                 datosCliente[1] = rs.getString(2);
                 datosCliente[2] = rs.getString(3);
-                
-                cmbDatosClien.addItem(datosCliente[0]+" - "+datosCliente[1]+" - "+datosCliente[2]);
-            } 
+
+                cmbDatosClien.addItem(datosCliente[0] + " - " + datosCliente[1] + " - " + datosCliente[2]);
+            }
 
         } catch (Exception ex) {
-            System.out.println("ERROR LLENAR COMBO CEDULA "+ex);
+            System.out.println("ERROR LLENAR COMBO CEDULA " + ex);
         }
 
     }
-    
-    public void numeroFactura (){  
-         
-          try {
+
+    public void numeroFactura() {
+
+        try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery("SELECT max(NOFACT) FROM CAB_FACT");
-            
+
             while (rs.next()) {
-                 numFact  = Integer.parseInt(rs.getString(1));
+                numFact = Integer.parseInt(rs.getString(1));
             }
-            
-            numFact = numFact+1; 
-            
+
+            numFact = numFact + 1;
+
             txtNumeroFactura.setText(String.valueOf(numFact));
-            
-            
+
         } catch (Exception ex) {
             numFact = 1;
             txtNumeroFactura.setText(String.valueOf(numFact));
         }
-     }
-    
-      public int separarCedString (String cadena){
+    }
+
+    public int separarCedString(String cadena) {
         int cedul = 0;
         try {
-            String subCadena = cadena.substring(0,10);
+            String subCadena = cadena.substring(0, 10);
             cedul = Integer.parseInt(subCadena);
         } catch (Exception e) {
             System.out.println(e);;
         }
-        
+
         return cedul;
     }
-      
-     public void obtenerFecha() {
-         try {
 
-             String fecha = "";
-             Statement st3 = cn.createStatement();
-             ResultSet rs3 = st3.executeQuery("SELECT CURDATE()");
+    public void obtenerFecha() {
+        try {
 
-             while (rs3.next()) {
-                 fecha = rs3.getString(1);
-             }
+            String fecha = "";
+            Statement st3 = cn.createStatement();
+            ResultSet rs3 = st3.executeQuery("SELECT CURDATE()");
 
-             txtFechaFact.setText(fecha);
-         } catch (Exception e) {
-         }
+            while (rs3.next()) {
+                fecha = rs3.getString(1);
+            }
+
+            txtFechaFact.setText(fecha);
+        } catch (Exception e) {
+        }
     }
-     
-     public void calcularTotales(){
-         
-         subTotal = 0.0;
-         iva = 0.0;
-         total = 0.0;
-         
-         int filas = modelo.getRowCount();
-         
-         for (int i=0; i<filas;i++) {
-             String subFila  = (String) modelo.getValueAt(i, 3);
-             subTotal = subTotal+ Double.valueOf(subFila); 
-         }
-    
-         
-         txtSubtotalFact.setText(String.valueOf(subTotal));
-         
-         iva = (subTotal * 12)/100;
-         
-         total = subTotal + iva;
-         
-         txtIVAFact.setText(String.valueOf(iva));
-         txtTotalFact.setText(String.valueOf(total));
-         
-         System.out.println("YA PASE");
-         
-     }
-     
-     
-    
-        @SuppressWarnings("unchecked")
+
+    public void calcularTotales() {
+
+        subTotal = 0.0;
+        iva = 0.0;
+        total = 0.0;
+
+        int filas = modelo.getRowCount();
+
+        for (int i = 0; i < filas; i++) {
+            String subFila = (String) modelo.getValueAt(i, 3);
+            subTotal = subTotal + Double.valueOf(subFila);
+        }
+
+        txtSubtotalFact.setText(String.valueOf(subTotal));
+
+        iva = (subTotal * 12) / 100;
+
+        total = subTotal + iva;
+
+        txtIVAFact.setText(String.valueOf(iva));
+        txtTotalFact.setText(String.valueOf(total));
+
+        System.out.println("YA PASE");
+
+    }
+
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -536,7 +528,7 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cmbDatosClien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -562,14 +554,14 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                     .addComponent(btnLimpiarDatos, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtFechaFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8)
                             .addComponent(cmbOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(43, 43, 43))
+                        .addGap(16, 16, 16))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel13)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
@@ -765,11 +757,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addComponent(btnRegresar)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -778,11 +770,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCliActionPerformed
-        
+
         String cedula = txtCedCli.getText();
         String idOrden = (String) cmbOrdenTrabajo.getSelectedItem();
-        if(cmbDatosClien.getSelectedIndex() != -1 && cmbOrdenTrabajo.getSelectedIndex() != -1){
-             
+        if (cmbDatosClien.getSelectedIndex() != -1 && cmbOrdenTrabajo.getSelectedIndex() != -1) {
+
             mostrarDetalleFacturaTabla(idOrden);
             cmbDatosClien.setEnabled(false);
             cmbOrdenTrabajo.setEnabled(false);
@@ -792,25 +784,20 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
 
             calcularTotales();
 
-        }else{
+        } else {
             JOptionPane.showMessageDialog(rootPane, "SELECCIONE LOS CAMPOS DE DATOS DEL CLIENTE O ORDEN DE TRABAJO");
         }
-       
-       
+
+
     }//GEN-LAST:event_btnBuscarCliActionPerformed
 
-    
-    
+
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        
-        FrmMenu venMenu = new FrmMenu();
-        venMenu.setSize(500, 500);
-        venMenu.setResizable(false);
-        venMenu.setDefaultCloseOperation(venMenu.EXIT_ON_CLOSE);
-        venMenu.setLocation(500, 100);
-        venMenu.setVisible(true);
+
+        FrmMenu menu = new FrmMenu();
+        menu.setVisible(true);
         this.dispose();
-        
+
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnGuardarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarFacturaActionPerformed
@@ -825,12 +812,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
             String numFact = txtNumeroFactura.getText();
             String rucCli = txtCedCli.getText();
             String fechaEmision = txtFechaFact.getText();
-            String idOrden= (String) cmbOrdenTrabajo.getSelectedItem();
+            String idOrden = (String) cmbOrdenTrabajo.getSelectedItem();
             String Subtotal = txtSubtotalFact.getText();
             String iva = txtIVAFact.getText();
             String total = txtTotalFact.getText();
             String rucEmpre = "1723036552";
-          
 
             try {
 
@@ -840,32 +826,35 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 pst.setString(2, rucCli);
                 pst.setString(3, fechaEmision);
                 pst.setString(4, idOrden);
-                pst.setString(5, rucEmpre );
+                pst.setString(5, rucEmpre);
                 pst.setString(6, Subtotal);
                 pst.setString(7, iva);
                 pst.setString(8, total);
-                
+
                 pst.executeUpdate();
-                
+
                 JOptionPane.showMessageDialog(rootPane, "LA FACTURA SE HA REGISTRADO EXITOSAMENTE");
-                
+
+                String query = "INSERT INTO `cuenta_x_cobrar` VALUES (NULL, '" + txtTotalFact.getText() + "', '" + txtNumeroFactura.getText() + "', '" + txtFechaFact.getText() + "')";
+
+                executeSqlQuery(query, "Inserted");
+
                 inicializarCampos();
                 int filas = modelo.getRowCount();
                 for (int i = 0; i < filas; i++) {
                     modelo.removeRow(0);
                 }
-               
+
                 cmbDatosClien.setEnabled(true);
                 obtenerFecha();
                 numeroFactura();
                 try {
-                    String sql = "UPDATE `ORDEN_TRABAJO` SET `facturado`='SI' WHERE IdOrden = '"+idOrden+"'";
+                    String sql = "UPDATE `ORDEN_TRABAJO` SET `facturado`='SI' WHERE IdOrden = '" + idOrden + "'";
                     PreparedStatement pst2 = cn.prepareStatement(sql);
                     pst2.executeUpdate();
                 } catch (Exception e) {
                     System.out.println("NO SE AUTUALIZO LOS DATOS");
                 }
-                
 
             } catch (Exception e) {
                 System.out.println("" + e);
@@ -879,12 +868,12 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarFacturaActionPerformed
 
     private void btnLimpiarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarDatosActionPerformed
-        
+
         btnBuscarCli.setEnabled(true);
         cmbDatosClien.setEnabled(true);
         LimpiarCampos();
         inicializarCampos();
-       
+
         int filas = modelo.getRowCount();
         for (int i = 0; i < filas; i++) {
             modelo.removeRow(0);
@@ -893,12 +882,10 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         obtenerFecha();
         numeroFactura();
 
-        
-        
+
     }//GEN-LAST:event_btnLimpiarDatosActionPerformed
 
-     
-      
+
     private void txtCedCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedCliActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCedCliActionPerformed
@@ -908,32 +895,32 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFechaFactActionPerformed
 
     private void cmbOrdenTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOrdenTrabajoActionPerformed
-       
+
         int select = cmbDatosClien.getSelectedIndex();
         if (select != -1) {
             cmbOrdenTrabajo.setEnabled(true);
-            
+
             if (cmbOrdenTrabajo.getSelectedIndex() != -1) {
                 String idOrden = (String) cmbOrdenTrabajo.getSelectedItem();
-                
+
             } else {
 
             }
-        }else{
-             cmbOrdenTrabajo.setEnabled(false);
+        } else {
+            cmbOrdenTrabajo.setEnabled(false);
         }
-        
-           
+
+
     }//GEN-LAST:event_cmbOrdenTrabajoActionPerformed
 
     private void cmbDatosClienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDatosClienActionPerformed
-        
+
         int select = cmbDatosClien.getSelectedIndex();
-       
+
         if (select != -1) {
-             String datosClienteFact[] = new String[6];
+            String datosClienteFact[] = new String[6];
             try {
-                
+
                 String datosCliente = (String) cmbDatosClien.getSelectedItem();
                 int ced = separarCedString(datosCliente);
 
@@ -957,34 +944,30 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                         txtNomCli.setText(datosClienteFact[0]);
                         txtApelCLi.setText(datosClienteFact[5]);
                     }
-                    
-                    
+
                     txtNomCli.setEnabled(true);
                     txtCedCli.setEnabled(true);
                     txtDirCli.setEnabled(true);
                     txtTlfCli.setEnabled(true);
                     txtEmailCli.setEnabled(true);
                     txtApelCLi.setEnabled(true);
-                    
+
                 }
-                
+
                 cmbOrdenTrabajo.removeAllItems();
                 cargarDatosComboOrdenTrabajo(ced);
-
-               
 
             } catch (Exception e) {
             }
 
         }
- 
+
     }//GEN-LAST:event_cmbDatosClienActionPerformed
 
     private void txtSubtotalFactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSubtotalFactActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSubtotalFactActionPerformed
 
-    
     /**
      * @param args the command line arguments
      */
@@ -1096,7 +1079,7 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     private javax.swing.JTextField txtTotalFact;
     // End of variables declaration//GEN-END:variables
 
-conectar cc = new conectar();
-Connection cn = cc.conexion();
+    conectar cc = new conectar();
+    Connection cn = cc.conexion();
 
 }

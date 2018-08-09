@@ -409,7 +409,7 @@ public class FrmRegistrarEmpleado extends javax.swing.JFrame {
                     this.dispose();
 
                 } else {
-                    JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO veri", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
+                    JOptionPane.showMessageDialog(null, " # CEDULA NO VALIDO.", "ERROR!!", JOptionPane.WARNING_MESSAGE);//num Verificador
                 }
 
             } else {
