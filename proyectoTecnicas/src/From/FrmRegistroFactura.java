@@ -25,26 +25,23 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     
     public static String FechaFact = "";
     public static DefaultTableModel modelo;
-    public static float total = 0;
-    public static float totalFacturaSinIVA = 0;
-    public static float totalFacturaConIVA= 0;
-    public static float totalPorProducto= 0;
-    public static int contador= 0;
-     public static int contadorTabla= 0;
+
     
     public static int numFact = 0;
+    
+    double subTotal = 0.00;
+    double iva = 0.00;
+    double total = 0.00;
     
 
    
     public FrmRegistroFactura() {
-        initComponents();
-        //mostrarDetalleFacturaTabla();
-       // mostrarProductosComboProd();
-       inicializarCampos();
+       initComponents();
        numeroFactura();
-      
-        //obtenerNummerodeRegustros();
-       
+       cargarComboDatosCLiente();
+       inicializarCampos();
+       obtenerFecha();
+       numeroFactura();
         
     }
     
@@ -58,22 +55,35 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         txtTlfCli.setEditable(false);
         txtFechaFact.setEditable(false);
         txtNumeroFactura.setEditable(false);
-        txtCantProdFact.setEditable(false);
+        
+        txtCedCli.setText("");
+        txtNomCli.setText("");
+        txtApelCLi.setText("");
+        txtDirCli.setText("");
+        txtEmailCli.setText("");
+        txtTlfCli.setText("");
+        txtFechaFact.setText("");
+        txtNumeroFactura.setText("");
+        
+        txtSubtotalFact.setText("");
+        txtIVAFact.setText("");
+        txtTotalFact.setText("");
+
         txtFechaFact.setEditable(false);
         txtNumeroFactura.setEditable(false);
         
-        btnAgregarProdFact.setEnabled(false);
+       
         btnGuardarFactura.setEnabled(false);
         btnLimpiarDatos.setEnabled(false);
-        btnCrearFactura.setEnabled(false);
+       
         btnRegresar.setEnabled(true);
         
         txtSubtotalFact.setEditable(false);
         txtIVAFact.setEditable(false);
         txtTotalFact.setEditable(false);
         
-        cmbListaProdFact.setEnabled(false);
-        cmbListaProdFact.setSelectedIndex(-1);
+        
+        cmbDatosClien.setSelectedIndex(-1);
         
         cmbOrdenTrabajo.setEnabled(false);
         cmbOrdenTrabajo.setSelectedIndex(-1);
@@ -91,7 +101,6 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
        txtTlfCli.setText("");
        txtFechaFact.setText("");
        txtNumeroFactura.setText("");
-       txtCantProdFact.setText("");
         
         txtSubtotalFact.setText("");
         txtIVAFact.setText("");
@@ -142,24 +151,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 
                 btnBuscarCli.setEnabled(false);
                 btnLimpiarDatos.setEnabled(true);
-                btnCrearFactura.setEnabled(true);
-                
+               
                 cmbOrdenTrabajo.setEnabled(true);
                 cmbOrdenTrabajo.setSelectedIndex(-1);
-                cargarDatosComboOrdenTrabajo();
-                
-                mostrarProductosComboProd();
-               
-                cmbListaProdFact.setEnabled(true);
-                btnAgregarProdFact.setEnabled(true);
-                
-               
-                
-                
-                
-                
-                
-                
+                //cargarDatosComboOrdenTrabajo();
+      
             }else{
                 JOptionPane.showMessageDialog(null, "!!    CLIENTE NO REGISTRADO   !!");
                 inicializarCampos();
@@ -174,8 +170,7 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     
      public void mostrarDetalleFacturaTabla(String idOrden){
          double subTotal = 0.00;
-         contadorTabla=0;
-        
+         
         modelo = new DefaultTableModel(){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -198,10 +193,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
              ResultSet rs = st.executeQuery(sql);
              
             String datos[] = new String[4];
+            String datosProd[] = new String[4];
             String valores[] = new String[4];
 
             while (rs.next()) {
-                contadorTabla = contadorTabla + 1;
+                
                 datos[0] = "1";
                 datos[1] = rs.getString(1);
                 datos[2] = rs.getString(2);
@@ -210,18 +206,24 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 valores[1] = rs.getString(4);
                 valores[2] = rs.getString(5);
                 valores[3] = rs.getString(6);
-                
                 modelo.addRow(datos);
+               
             }
             
-            subTotal = Double.valueOf(valores[1])+ Double.valueOf(valores[0]);
-            txtSubtotalFact.setText(String.valueOf(subTotal));
-            txtIVAFact.setText(valores[2]);
-            txtTotalFact.setText( valores[3]);
-                    
-           
-            
-            
+            String sql2 = "SELECT prod.Cantidad,prod.Descripcion, prod.PrecioUnit FROM orden_trabajo ord, det_ordenproducto dop, producto prod\n" +
+                            " where ord.IdOrden = dop.IdOrden and prod.IdProd = dop.IdProd and ord.IdOrden ='"+idOrden+"'";
+             Statement st2 = cn.createStatement();
+             ResultSet rs2 = st.executeQuery(sql2);
+             System.out.println("MAMA");
+             while (rs2.next()) {
+                
+                datosProd[0] = rs2.getString(1);
+                datosProd[1] = rs2.getString(2);
+                datosProd[2] = rs2.getString(3);
+                datosProd[3] = String.valueOf((Double.parseDouble(rs2.getString(3))*Double.parseDouble(rs2.getString(1))));
+                modelo.addRow(datosProd);
+            }
+             
              
              
          } catch (Exception e) {
@@ -230,29 +232,6 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
 
   
     }
-     
-     public static boolean validarFecha(String fecha) {
-             
-            try {
-                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-                formatoFecha.setLenient(false);
-                formatoFecha.parse(fecha);
-                
-                String[] partesFecha = fecha.split("/");
-                int año = Integer.parseInt(partesFecha[2]);
-               
-                if(año >=1990 && año <= 2020  ){
-                    FechaFact = partesFecha[2]+"-"+partesFecha[1]+"-"+partesFecha[0];
-                    
-                   return true; 
-                }else{
-                    return false;
-                }
-                
-            } catch (ParseException e) {
-                return false;
-            }
-        }
      
      public void crearFactura(){
         try{
@@ -277,113 +256,15 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
 
     }
      
-     public void mostrarProductosComboProd(){
-        
-         String [] datosProd = new String [3];
-       
-        try{
-            Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM PRODUCTO");
-            while(rs.next()){
-                datosProd[0] = rs.getString(2);
-                cmbListaProdFact.addItem(datosProd[0]);
-                
-            }
-            
-        }catch(SQLException ex){
-            
-        }
-        
-    }
-    public void agregarProductosAlaTablaDetalleFact() {
-
-        String detalleProdSelect = (String) cmbListaProdFact.getSelectedItem();
-
-        String[] datosProdDetalleFact = new String[6];
-
-        try {
-            if (!txtCantProdFact.getText().equals("") && cmbListaProdFact.getSelectedIndex() != -1) {
-                
-                totalPorProducto = 0;
-                Statement st = cn.createStatement();
-                
-                PreparedStatement pst = cn.prepareStatement("INSERT INTO DET_FACT (IDDETALLE,NUMFACT,CODPROD,CANTIDAD,PRECIO,TOTAL) VALUES (?,?,?,?,?,?)");
-                
-                ResultSet rs = st.executeQuery("SELECT * FROM PRODUCTOS");
-                
-                while (rs.next()) {
-
-                    datosProdDetalleFact[0] = txtCantProdFact.getText();
-                    datosProdDetalleFact[1] = rs.getString(3); //detalleProd
-                    datosProdDetalleFact[2] = rs.getString(2); //precioProd
-                    datosProdDetalleFact[4] = rs.getString(1); //codg producto
-
-                    if (detalleProdSelect.equals(datosProdDetalleFact[1])) {
-                        contador = contador+1;
-                        
-                        total = Float.parseFloat(datosProdDetalleFact[2]) * Integer.parseInt(txtCantProdFact.getText());
-                        
-                        totalPorProducto = Float.parseFloat(datosProdDetalleFact[2]) * Integer.parseInt(txtCantProdFact.getText());
-                        
-                        totalFacturaSinIVA = totalFacturaSinIVA + total;
-                        txtSubtotalFact.setText(String.valueOf(totalFacturaSinIVA));
-                        datosProdDetalleFact[3] = String.valueOf(total);
-                        
-                        //agrego a la tabla DET_FACT en my base de datos los productos que compro con esta factura
-                        
-                        
-                        pst.setString(1,String.valueOf(contador) ); //agrego a DET_FACT el numero de detalle de factura
-                        pst.setString(2, txtNumeroFactura.getText()); // agrego a DET_FACT el numero de factura
-                        pst.setString(3, datosProdDetalleFact[4]); // agrego a DET_FAT el codigo de producto
-                        pst.setString(4, txtCantProdFact.getText()); // agrego a DET_FAT la cantidad
-                        pst.setString(5, datosProdDetalleFact[2]); // agrego a DET_FAT el precio del producto
-                        pst.setString(6, String.valueOf(totalPorProducto)); // agrefo a DET_FAT el total de la factura
-                        System.out.println("ya pase ");
-                        pst.executeUpdate();
-                        
-                        modelo.addRow(datosProdDetalleFact);
-                    }
-
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "    !!   INGRESE UN CANTIDAD Y SELECCIONE UN PRODUCTO   !!     ");
-
-            }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "    !!   ERROR   !!     ");
-        }
-
-    }
-
-    public void obtenerNummerodeRegustros(){
-        
-        String sumCont = "";
-        try {
-              Statement st = cn.createStatement();
-                ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM DET_FACT");
-                  if(rs.next()){
-                  sumCont = rs.getString(1);
-                }
-                
-                contador = Integer.parseInt(sumCont);
-                System.out.println("Cont "+contador);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(FrmRegistroFactura.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-    }
     
-    public void cargarDatosComboOrdenTrabajo(){
+    
+    public void cargarDatosComboOrdenTrabajo(int ced){
         
-        String numCed = txtCedCli.getText();
+        String numCed = String.valueOf(ced);
         
         try {
-         
-            String sql = "SELECT IDORDEN FROM ORDEN_TRABAJO WHERE RUCCLI = '" + numCed + "'";
+            
+            String sql = "SELECT IDORDEN FROM ORDEN_TRABAJO WHERE RUCCLI = '" + numCed + "'  AND `facturado` = 'NO'";
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
@@ -398,6 +279,106 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
             Logger.getLogger(FrmRegistroFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void cargarComboDatosCLiente(){
+           String[] datosCliente = new String[3];
+
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT DISTINCT ord.RucCli,NomCli,ApelCli FROM orden_trabajo ord, cliente cli\n" +
+            "where ord.RucCli = cli.RucCli");
+
+            while (rs.next()) {
+                datosCliente[0] = rs.getString(1);
+                datosCliente[1] = rs.getString(2);
+                datosCliente[2] = rs.getString(3);
+                
+                cmbDatosClien.addItem(datosCliente[0]+" - "+datosCliente[1]+" - "+datosCliente[2]);
+            } 
+
+        } catch (Exception ex) {
+            System.out.println("ERROR LLENAR COMBO CEDULA "+ex);
+        }
+
+    }
+    
+    public void numeroFactura (){  
+         
+          try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT max(NOFACT) FROM CAB_FACT");
+            
+            while (rs.next()) {
+                 numFact  = Integer.parseInt(rs.getString(1));
+            }
+            
+            numFact = numFact+1; 
+            
+            txtNumeroFactura.setText(String.valueOf(numFact));
+            
+            
+        } catch (Exception ex) {
+            numFact = 1;
+            txtNumeroFactura.setText(String.valueOf(numFact));
+        }
+     }
+    
+      public int separarCedString (String cadena){
+        int cedul = 0;
+        try {
+            String subCadena = cadena.substring(0,10);
+            cedul = Integer.parseInt(subCadena);
+        } catch (Exception e) {
+            System.out.println(e);;
+        }
+        
+        return cedul;
+    }
+      
+     public void obtenerFecha() {
+         try {
+
+             String fecha = "";
+             Statement st3 = cn.createStatement();
+             ResultSet rs3 = st3.executeQuery("SELECT CURDATE()");
+
+             while (rs3.next()) {
+                 fecha = rs3.getString(1);
+             }
+
+             txtFechaFact.setText(fecha);
+         } catch (Exception e) {
+         }
+    }
+     
+     public void calcularTotales(){
+         
+         subTotal = 0.0;
+         iva = 0.0;
+         total = 0.0;
+         
+         int filas = modelo.getRowCount();
+         
+         for (int i=0; i<filas;i++) {
+             String subFila  = (String) modelo.getValueAt(i, 3);
+             subTotal = subTotal+ Double.valueOf(subFila); 
+         }
+    
+         
+         txtSubtotalFact.setText(String.valueOf(subTotal));
+         
+         iva = (subTotal * 12)/100;
+         
+         total = subTotal + iva;
+         
+         txtIVAFact.setText(String.valueOf(iva));
+         txtTotalFact.setText(String.valueOf(total));
+         
+         System.out.println("YA PASE");
+         
+     }
+     
+     
     
         @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -420,25 +401,17 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         txtFechaFact = new javax.swing.JTextField();
         btnLimpiarDatos = new javax.swing.JButton();
-        jLabel23 = new javax.swing.JLabel();
-        btnCrearFactura = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         cmbOrdenTrabajo = new javax.swing.JComboBox<>();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
-        txtCantProdFact = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        btnAgregarProdFact = new javax.swing.JButton();
-        cmbListaProdFact = new javax.swing.JComboBox<>();
+        cmbDatosClien = new javax.swing.JComboBox<>();
         jPanel7 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        btnGuardarFactura = new javax.swing.JButton();
         txtSubtotalFact = new javax.swing.JTextField();
         txtIVAFact = new javax.swing.JTextField();
         txtTotalFact = new javax.swing.JTextField();
+        btnGuardarFactura = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
@@ -498,20 +471,17 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
             }
         });
 
-        jLabel23.setText("dd/mm/yyyy");
-
-        btnCrearFactura.setText("CREAR FACTURA");
-        btnCrearFactura.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCrearFacturaActionPerformed(evt);
-            }
-        });
-
         jLabel8.setText("Orden Trab N°: ");
 
         cmbOrdenTrabajo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbOrdenTrabajoActionPerformed(evt);
+            }
+        });
+
+        cmbDatosClien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbDatosClienActionPerformed(evt);
             }
         });
 
@@ -521,153 +491,87 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addComponent(jLabel3))
-                    .addComponent(jLabel13))
-                .addGap(24, 24, 24)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtCedCli))
+                    .addComponent(cmbDatosClien, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel13))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFechaFact, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDirCli))))
+                .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNomCli, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
-                            .addComponent(txtCedCli)
-                            .addComponent(txtDirCli)
-                            .addComponent(txtFechaFact))
-                        .addGap(42, 42, 42)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jLabel5))
-                                    .addComponent(jLabel6))
-                                .addGap(42, 42, 42)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtTlfCli, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                                        .addComponent(txtApelCLi, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addComponent(txtEmailCli, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbOrdenTrabajo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addComponent(jLabel23))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnLimpiarDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBuscarCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCrearFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTlfCli, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtApelCLi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmailCli, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbOrdenTrabajo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(35, 35, 35)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBuscarCli, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLimpiarDatos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtApelCLi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtCedCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(txtTlfCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtDirCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel6)
-                                .addComponent(txtEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(btnBuscarCli)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCrearFactura)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtFechaFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnLimpiarDatos)
-                        .addComponent(jLabel8)
-                        .addComponent(cmbOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel23)
-                .addContainerGap(31, Short.MAX_VALUE))
-        );
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabel16.setText("CANTIDAD: ");
-
-        jLabel17.setText("SELECCIONAR PRODUCTO");
-
-        jLabel18.setText("PRODUCTO: ");
-
-        btnAgregarProdFact.setText("AGREGAR PRODUCTO");
-        btnAgregarProdFact.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarProdFactActionPerformed(evt);
-            }
-        });
-
-        cmbListaProdFact.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbListaProdFactActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 158, Short.MAX_VALUE)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel17)
-                                .addGap(65, 65, 65))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(btnAgregarProdFact)
-                                .addGap(67, 67, 67))))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbListaProdFact, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCantProdFact)))
-                        .addContainerGap())))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jLabel17)
+                .addComponent(cmbDatosClien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtApelCLi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(txtCantProdFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18)
-                    .addComponent(cmbListaProdFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAgregarProdFact)
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel3)
+                                .addComponent(txtCedCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5)
+                                .addComponent(txtTlfCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnBuscarCli))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtDirCli, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(4, 4, 4))
+                    .addComponent(btnLimpiarDatos, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtFechaFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8)
+                            .addComponent(cmbOrdenTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(43, 43, 43))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel13)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -677,6 +581,12 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         jLabel20.setText("IVA 12%: ");
 
         jLabel21.setText("TOTAL: ");
+
+        txtSubtotalFact.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSubtotalFactActionPerformed(evt);
+            }
+        });
 
         btnGuardarFactura.setText("GUARDAR FACTURA");
         btnGuardarFactura.addActionListener(new java.awt.event.ActionListener() {
@@ -690,22 +600,19 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel20)
-                            .addComponent(jLabel21))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSubtotalFact, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                            .addComponent(txtIVAFact)
-                            .addComponent(txtTotalFact)))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(btnGuardarFactura)))
-                .addContainerGap(130, Short.MAX_VALUE))
+                    .addComponent(jLabel19)
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel21))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtSubtotalFact, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                    .addComponent(txtIVAFact)
+                    .addComponent(txtTotalFact))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(btnGuardarFactura)
+                .addGap(29, 29, 29))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -717,14 +624,13 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
-                    .addComponent(txtIVAFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(txtIVAFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGuardarFactura))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
-                    .addComponent(txtTotalFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addComponent(btnGuardarFactura)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtTotalFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         btnRegresar.setText("REGRESAR");
@@ -830,25 +736,20 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(13, 13, 13)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnRegresar))
-                                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRegresar)
+                        .addGap(9, 9, 9))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -860,21 +761,16 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
+                            .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
+                        .addGap(76, 76, 76)
                         .addComponent(btnRegresar)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -884,14 +780,22 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     private void btnBuscarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCliActionPerformed
         
         String cedula = txtCedCli.getText();
-        
-        if(!cedula.equals("")){
-            
-            mostrarDatos(cedula);
-            
+        String idOrden = (String) cmbOrdenTrabajo.getSelectedItem();
+        if(cmbDatosClien.getSelectedIndex() != -1 && cmbOrdenTrabajo.getSelectedIndex() != -1){
+             
+            mostrarDetalleFacturaTabla(idOrden);
+            cmbDatosClien.setEnabled(false);
+            cmbOrdenTrabajo.setEnabled(false);
+            btnLimpiarDatos.setEnabled(true);
+
+            btnGuardarFactura.setEnabled(true);
+
+            calcularTotales();
+
         }else{
-            JOptionPane.showMessageDialog(null, "  !!  INGRESE UN NUMERO DE CEDULA  !!  ");
+            JOptionPane.showMessageDialog(rootPane, "SELECCIONE LOS CAMPOS DE DATOS DEL CLIENTE O ORDEN DE TRABAJO");
         }
+       
        
     }//GEN-LAST:event_btnBuscarCliActionPerformed
 
@@ -899,131 +803,102 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         
-        FrmMenu menu = new FrmMenu();
-        menu.setVisible(true);
+        FrmMenu venMenu = new FrmMenu();
+        venMenu.setSize(500, 500);
+        venMenu.setResizable(false);
+        venMenu.setDefaultCloseOperation(venMenu.EXIT_ON_CLOSE);
+        venMenu.setLocation(500, 100);
+        venMenu.setVisible(true);
         this.dispose();
         
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnGuardarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarFacturaActionPerformed
 
-        
-        btnAgregarProdFact.setEnabled(false);
-        
-        float IVA = (totalFacturaSinIVA*12)/100;
-        txtIVAFact.setText(String.valueOf(IVA));
-        
-        totalFacturaConIVA = totalFacturaSinIVA+IVA;
-        txtTotalFact.setText(String.valueOf(totalFacturaConIVA));
-        
-        txtCantProdFact.setEditable(false);
-        cmbListaProdFact.setEnabled(false);
-        
-        btnRegresar.setEnabled(true);
-        btnGuardarFactura.setEnabled(false);
-        
-        totalFacturaConIVA = 0;
-        totalFacturaSinIVA = 0;
-        
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog(this, "!DESEA GUARDAR ESTA FACTURA!", "Confirmacion", dialogButton);
+
+        if (dialogResult == 0) {
+
+            System.out.println("Yes option");
+
+            String numFact = txtNumeroFactura.getText();
+            String rucCli = txtCedCli.getText();
+            String fechaEmision = txtFechaFact.getText();
+            String idOrden= (String) cmbOrdenTrabajo.getSelectedItem();
+            String Subtotal = txtSubtotalFact.getText();
+            String iva = txtIVAFact.getText();
+            String total = txtTotalFact.getText();
+            String rucEmpre = "1723036552";
+          
+
+            try {
+
+                PreparedStatement pst = cn.prepareStatement("INSERT INTO `cab_fact`(`NoFact`, `RucCli`, `fechaFact`, `IdOrden`, `RucEmpre`, `Subtotal`, `Iva`, `Total`) VALUES (?,?,?,?,?,?,?,?)");
+
+                pst.setString(1, numFact);
+                pst.setString(2, rucCli);
+                pst.setString(3, fechaEmision);
+                pst.setString(4, idOrden);
+                pst.setString(5, rucEmpre );
+                pst.setString(6, Subtotal);
+                pst.setString(7, iva);
+                pst.setString(8, total);
+                
+                pst.executeUpdate();
+                
+                JOptionPane.showMessageDialog(rootPane, "LA FACTURA SE HA REGISTRADO EXITOSAMENTE");
+                
+                inicializarCampos();
+                int filas = modelo.getRowCount();
+                for (int i = 0; i < filas; i++) {
+                    modelo.removeRow(0);
+                }
+               
+                cmbDatosClien.setEnabled(true);
+                obtenerFecha();
+                numeroFactura();
+                try {
+                    String sql = "UPDATE `ORDEN_TRABAJO` SET `facturado`='SI' WHERE IdOrden = '"+idOrden+"'";
+                    PreparedStatement pst2 = cn.prepareStatement(sql);
+                    pst2.executeUpdate();
+                } catch (Exception e) {
+                    System.out.println("NO SE AUTUALIZO LOS DATOS");
+                }
+                
+
+            } catch (Exception e) {
+                System.out.println("" + e);
+            }
+
+        } else {
+            System.out.println("No Option");
+        }
+
+
     }//GEN-LAST:event_btnGuardarFacturaActionPerformed
 
     private void btnLimpiarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarDatosActionPerformed
         
         btnBuscarCli.setEnabled(true);
+        cmbDatosClien.setEnabled(true);
         LimpiarCampos();
         inicializarCampos();
+       
+        int filas = modelo.getRowCount();
+        for (int i = 0; i < filas; i++) {
+            modelo.removeRow(0);
+        }
+
+        obtenerFecha();
+        numeroFactura();
+
+        
         
     }//GEN-LAST:event_btnLimpiarDatosActionPerformed
 
-    private void btnAgregarProdFactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProdFactActionPerformed
-        
-        String numFact = txtNumeroFactura.getText();
-        String detalleProd = (String) cmbListaProdFact.getSelectedItem();
-        String cantidadProd = txtCantProdFact.getText();
-        
-        agregarProductosAlaTablaDetalleFact();
-        
-        txtCantProdFact.setText("");
-        cmbListaProdFact.setSelectedIndex(-1);
-        
-        btnGuardarFactura.setEnabled(true);
- 
-
-    }//GEN-LAST:event_btnAgregarProdFactActionPerformed
-
-     public void numeroFactura (){  
-         
-          try {
-            Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT max(NOFACT) FROM CAB_FACT");
-            
-            while (rs.next()) {
-                 numFact  = Integer.parseInt(rs.getString(1));
-            }
-            
-            numFact = numFact+1; 
-            
-            txtNumeroFactura.setText(String.valueOf(numFact));
-            
-            
-        } catch (Exception ex) {
-            numFact = 1;
-            txtNumeroFactura.setText(String.valueOf(numFact));
-        }
-     }
-    
-    private void btnCrearFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearFacturaActionPerformed
-        
-       String fecha = txtFechaFact.getText();
-       String numeroFact = txtNumeroFactura.getText();
-       String cedulaCli = txtCedCli.getText();
-       
-       boolean fechaValidar = validarFecha(fecha);
-       
-        if(!fecha.equals("") && !numeroFact.equals("")){
-            
-            if (fechaValidar == true) {
-                
-                System.out.println("si entre");
-                
-                try {
-                    PreparedStatement pst = cn.prepareStatement("INSERT INTO CAB_FACT (NUMFACT,CEDCLI,FECHAVENTA) VALUES (?,?,?)");
-
-                    
-                    pst.setString(1, numeroFact  );
-                    pst.setString(2, cedulaCli );
-                    pst.setString(3, FechaFact);
-                    pst.executeUpdate();
-                    
-                    //JOptionPane.showMessageDialog(null, "     !!  FACTURA CREADA EXITODAMENTE  !! ");
-                    
-                    btnCrearFactura.setEnabled(false);
-                    btnLimpiarDatos.setEnabled(false);
-                    btnRegresar.setEnabled(false);
-                    btnAgregarProdFact.setEnabled(true);
-                    
-                    txtFechaFact.setEditable(false);
-                    txtNumeroFactura.setEditable(false);
-                    txtCantProdFact.setEditable(true);
-                    
-                    cmbListaProdFact.setEnabled(true);
-                    
-                    
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "  !!  NUMERO DE FACTURA YA REGISTRADO  !!   ");
-                }
-                
-            }else{
-                 JOptionPane.showMessageDialog(null, "  !!  FORMATO DE FECHA INCORRECTA dd/mm/yyyy  !!  ");
-            }
-            
-        }else{
-            JOptionPane.showMessageDialog(null, "    !!  LLENE LOS DATOS DE FECHA Y NUMERO DE FACTURA  !!    ");
-        }
-
-        
-    }//GEN-LAST:event_btnCrearFacturaActionPerformed
-
+     
+      
     private void txtCedCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedCliActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCedCliActionPerformed
@@ -1032,19 +907,82 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaFactActionPerformed
 
-    private void cmbListaProdFactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbListaProdFactActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbListaProdFactActionPerformed
-
     private void cmbOrdenTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOrdenTrabajoActionPerformed
-       if(cmbOrdenTrabajo.getSelectedIndex()!=-1){
-        String idOrden = (String)cmbOrdenTrabajo.getSelectedItem();
-        mostrarDetalleFacturaTabla(idOrden);
-       }else{
-           
-       }
+       
+        int select = cmbDatosClien.getSelectedIndex();
+        if (select != -1) {
+            cmbOrdenTrabajo.setEnabled(true);
+            
+            if (cmbOrdenTrabajo.getSelectedIndex() != -1) {
+                String idOrden = (String) cmbOrdenTrabajo.getSelectedItem();
+                
+            } else {
+
+            }
+        }else{
+             cmbOrdenTrabajo.setEnabled(false);
+        }
+        
            
     }//GEN-LAST:event_cmbOrdenTrabajoActionPerformed
+
+    private void cmbDatosClienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDatosClienActionPerformed
+        
+        int select = cmbDatosClien.getSelectedIndex();
+       
+        if (select != -1) {
+             String datosClienteFact[] = new String[6];
+            try {
+                
+                String datosCliente = (String) cmbDatosClien.getSelectedItem();
+                int ced = separarCedString(datosCliente);
+
+                Statement st = cn.createStatement();
+                ResultSet rs = st.executeQuery("SELECT `NomCli`,`RucCli`,`DirCli`,`TlfCli`,`EmailCli`,`ApelCli` FROM `cliente");
+
+                while (rs.next()) {
+                    datosClienteFact[0] = rs.getString(1);
+                    datosClienteFact[1] = rs.getString(2);
+                    datosClienteFact[2] = rs.getString(3);
+                    datosClienteFact[3] = rs.getString(4);
+                    datosClienteFact[4] = rs.getString(5);
+                    datosClienteFact[5] = rs.getString(6);
+
+                    if (datosClienteFact[1].equals(String.valueOf(ced))) {
+
+                        txtCedCli.setText(datosClienteFact[1]);
+                        txtDirCli.setText(datosClienteFact[2]);
+                        txtTlfCli.setText(datosClienteFact[3]);
+                        txtEmailCli.setText(datosClienteFact[4]);
+                        txtNomCli.setText(datosClienteFact[0]);
+                        txtApelCLi.setText(datosClienteFact[5]);
+                    }
+                    
+                    
+                    txtNomCli.setEnabled(true);
+                    txtCedCli.setEnabled(true);
+                    txtDirCli.setEnabled(true);
+                    txtTlfCli.setEnabled(true);
+                    txtEmailCli.setEnabled(true);
+                    txtApelCLi.setEnabled(true);
+                    
+                }
+                
+                cmbOrdenTrabajo.removeAllItems();
+                cargarDatosComboOrdenTrabajo(ced);
+
+               
+
+            } catch (Exception e) {
+            }
+
+        }
+ 
+    }//GEN-LAST:event_cmbDatosClienActionPerformed
+
+    private void txtSubtotalFactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSubtotalFactActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSubtotalFactActionPerformed
 
     
     /**
@@ -1088,6 +1026,22 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1098,13 +1052,11 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarProdFact;
     private javax.swing.JButton btnBuscarCli;
-    private javax.swing.JButton btnCrearFactura;
     private javax.swing.JButton btnGuardarFactura;
     private javax.swing.JButton btnLimpiarDatos;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> cmbListaProdFact;
+    private javax.swing.JComboBox<String> cmbDatosClien;
     private javax.swing.JComboBox<String> cmbOrdenTrabajo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1113,14 +1065,10 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1132,12 +1080,10 @@ public class FrmRegistroFactura extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblFactura;
     private javax.swing.JTextField txtApelCLi;
-    private javax.swing.JTextField txtCantProdFact;
     private javax.swing.JTextField txtCedCli;
     private javax.swing.JTextField txtDirCli;
     private javax.swing.JTextField txtEmailCli;

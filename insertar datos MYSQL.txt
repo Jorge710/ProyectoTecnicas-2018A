@@ -11,7 +11,17 @@ INSERT INTO cliente VALUES(1723036552,'JORGE','IZA','El Condado',0922145254,'iza
 						  (1712412645,'DAVID','LOPEZ','San Juan',2214587,'david@gmail.com',1),
 						  (1754121590,'HECTOR','CRUZ','Shyris',092143012,'hector@gmail.com',1),
 						  (1521452164,'JUAN','ALTAMIRANO','San Blas',092365428,'juan@gmail.com',1),
-						  (1325445789,'MARIA','CANDO','El Condado',2321021,'maria@gmail.com',1);
+						  (1325445789,'MARIA','CANDO','El Condado',2321021,'maria@gmail.com',1),
+                                                  (1725434193,'ANDRES','CORO','SAN CARLOS',0984999817,'andres@gmail.com',1);
+
+
+INSERT INTO vehiculo VALUES ('pcq-4350','chevrolet','sail','plomo',1725434193),
+('aaa-1111','kia','rio','rojo',1723036552),
+('bbb-2222','volkswagen','golf','azul',1712412645),
+('ccc-3333','toyota','siryus','plomo',1754121590),
+('ddd-4444','chevrolet','aveo','blanco',1521452164),
+('eee-5555','audi','a8','blanco',1325445789);
+
 
 
 INSERT INTO proveedor VALUES (1154218795,'SUSANA','RODRIGEZ','6 de Diciembre',09230594,'susana@hotmail.com',1),

@@ -58,7 +58,7 @@ CREATE TABLE producto
 
   
 CREATE TABLE cliente
- (RucCli NUMERIC (20) NOT NULL,
+ (RucCli NUMERIC (20) UNIQUE NOT NULL,
   NomCli VARCHAR (60) NOT NULL,
   ApelCli VARCHAR(30) NOT NULL,
   DirCli VARCHAR (60) NOT NULL,
@@ -111,6 +111,7 @@ CREATE TABLE orden_trabajo
   Subtotal DECIMAL (10,2) NOT NULL,
   Iva DECIMAL (10,2) NOT NULL,
   Total DECIMAL (10,2) NOT NULL,
+  facturado varchar (2) NULL,
   FOREIGN KEY (RucCli) REFERENCES cliente (RucCli)
 	ON UPDATE CASCADE,
   FOREIGN KEY (Placa) REFERENCES vehiculo (Placa)
@@ -144,29 +145,21 @@ FOREIGN KEY (IdProd) REFERENCES servicio (IdServ)
 
 
 CREATE TABLE cab_fact
- (NoFact INT UNIQUE AUTO_INCREMENT,
+ (NoFact INT ,
   RucCli NUMERIC (20) NOT NULL,
-  NomCli VARCHAR (50) NOT NULL, 
-  RucEmpre NUMERIC (20) NOT NULL,
+  fechaFact date not  null,
+  IdOrden NUMERIC (10) NOT NULL,
+  RucEmpre NUMERIC (20) null,
+  Subtotal DECIMAL (10,2) NOT NULL,
+  Iva DECIMAL (10,2) NOT NULL,
+  Total DECIMAL (10,2) NOT NULL,
   FOREIGN KEY (RucCli) REFERENCES cliente (RucCli),
   FOREIGN KEY (RucEmpre) REFERENCES empresa (RucEmpre),
+  FOREIGN KEY (IdOrden) REFERENCES orden_trabajo (IdOrden),
   PRIMARY KEY (NoFact)
   );
 
 
-CREATE TABLE det_fact
- (IDdet_fact INT UNIQUE AUTO_INCREMENT,
-  Cantidad NUMERIC (20) NOT NULL,
-  Precio DECIMAL (10,2) NOT NULL, 
-  Total DECIMAL (10,2) NOT NULL,
-  NoFact INT not null,
-  IdProd INT,
-  IdOrden NUMERIC (10),
-  FOREIGN KEY (NoFact) REFERENCES cab_fact (NoFact),
-  FOREIGN KEY (IdProd) REFERENCES producto (IdProd),
-  FOREIGN KEY (IdOrden) REFERENCES orden_trabajo (IdOrden),
-  PRIMARY KEY (IDdet_fact)
-  );
 
  
 CREATE TABLE cuenta_x_cobrar
